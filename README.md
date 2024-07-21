@@ -2,14 +2,10 @@
 This is a simple app for organizing recipes using Kotlin and Jetpack Compose in Android.
 
 ## Objective
-
----
-
 This app should provide a user the means to collect, organize, and search recipes with ease.  It should assist with nutritional goals, meal planning, and grocery budgeting.  It should introduce a variety of flavors and seasonal dishes to keep cooking more interesting and satisfying.
 
 ## Proposed Features
-
----
+These are the target features for this app.
 
 ### Categories and Tags
 User should be able to sort by custom **categories** and **tags**.  **Categories** might include *breakfast*, *lunch*, *snack* and **tags** might include *vegan*, *holiday*, or *quick meals*.  This could be coupled to [searches and filters](searches-and-filters) to improve sorting.  This might best be implemented using Compose `LazyColumn` or `LazyGrid` and `Room` for data storage.
@@ -42,9 +38,6 @@ User should be able to apply **favorites** or **bookmarks** for ease of access. 
 User should be able to select **batches** to modify serving sizes and personalize by adding **notes**.  This could be coupled to [shopping lists](shopping-lists) and [meal planning](meal-planning).  This might be implented using Compose `input` components and persistent storage using `Room`.
 
 ## Summary
-
----
-
 This app aims to strike a balance between being feature rich, yet simple and approachable enough for anybody to use and benefit.
 
 As always, feedback is welcome.  Suggestions or comments can be sent to me directly at [h.yavitz@gmail.com](mailto:h.yavitz@gmail.com).
