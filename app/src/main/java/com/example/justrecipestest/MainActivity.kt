@@ -41,6 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.justrecipestest.ui.theme.JustRecipesTestTheme
 
+// TODO: stub recipe card component
+
 val SnapshotStateListSaver: Saver<SnapshotStateList<String>, Any> = listSaver(
     save = { stateList -> stateList.toList() },
     restore = { savedList -> mutableStateListOf(*savedList.toTypedArray()) }
