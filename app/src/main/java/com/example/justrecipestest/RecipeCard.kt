@@ -91,41 +91,16 @@ private fun RecipeCardIngredientsHeader() {
 }
 
 @Composable
-private fun RecipeCardIngredient() {
-    Row(
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Column(
-            horizontalAlignment = Alignment.End,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier.weight(1f)
-        ) {
-            Checkbox(
-                checked = false,
-                onCheckedChange = { /*TODO*/ },
-            )
-        }
-        Column(
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier.weight(2f) // Adjust the weight to center the text
-        ) {
-            Text(
-                text = "6 oz. steak",
-                fontSize = 16.sp,
-            )
-        }
-    }
-}
-
-@Composable
 private fun RecipeCardIngredients() {
+    val ingredients = listOf(
+        Ingredient("6 oz. steak", false),
+        Ingredient("2 tbsp. olive oil", false),
+        Ingredient("1 clove garlic", false),
+        Ingredient("1/2 tsp. salt", false),
+        Ingredient("1/4 tsp. pepper", false),
+    )
     RecipeCardIngredientsHeader()
-    RecipeCardIngredient()
-    RecipeCardIngredient()
-    RecipeCardIngredient()
+    IngredientListStateful(ingredients)
 }
 
 @Composable
@@ -175,59 +150,59 @@ private fun RecipeCardInstructions() {
     RecipeCardInstruction()
 }
 
-@Composable
-private fun RecipeCardBottomNavigation(modifier: Modifier = Modifier) {
-    NavigationBar(
-        containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        modifier = modifier
-    ) {
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Home,
-                    contentDescription = null
-                )
-            },
-            label = {
-                Text(
-                    text = stringResource(R.string.bottom_navigation_home)
-                )
-            },
-            selected = true,
-            onClick = { /* TODO */ }
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Notifications,
-                    contentDescription = null
-                )
-            },
-            label = {
-                Text(
-                    text = stringResource(R.string.bottom_navigation_timer)
-                )
-            },
-            selected = false,
-            onClick = { /* TODO */ }
-        )
-        NavigationBarItem(
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Create,
-                    contentDescription = null
-                )
-            },
-            label = {
-                Text(
-                    text = stringResource(R.string.bottom_navigation_edit)
-                )
-            },
-            selected = false,
-            onClick = { /* TODO */ }
-        )
-    }
-}
+//@Composable
+//private fun RecipeCardBottomNavigation(modifier: Modifier = Modifier) {
+//    NavigationBar(
+//        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+//        modifier = modifier
+//    ) {
+//        NavigationBarItem(
+//            icon = {
+//                Icon(
+//                    imageVector = Icons.Default.Home,
+//                    contentDescription = null
+//                )
+//            },
+//            label = {
+//                Text(
+//                    text = stringResource(R.string.bottom_navigation_home)
+//                )
+//            },
+//            selected = true,
+//            onClick = { /* TODO */ }
+//        )
+//        NavigationBarItem(
+//            icon = {
+//                Icon(
+//                    imageVector = Icons.Default.Notifications,
+//                    contentDescription = null
+//                )
+//            },
+//            label = {
+//                Text(
+//                    text = stringResource(R.string.bottom_navigation_timer)
+//                )
+//            },
+//            selected = false,
+//            onClick = { /* TODO */ }
+//        )
+//        NavigationBarItem(
+//            icon = {
+//                Icon(
+//                    imageVector = Icons.Default.Create,
+//                    contentDescription = null
+//                )
+//            },
+//            label = {
+//                Text(
+//                    text = stringResource(R.string.bottom_navigation_edit)
+//                )
+//            },
+//            selected = false,
+//            onClick = { /* TODO */ }
+//        )
+//    }
+//}
 
 @Composable
 fun RecipeCard(modifier: Modifier = Modifier) {
@@ -250,7 +225,7 @@ fun RecipeCardPortrait() {
         RecipeCardMainHeader()
         RecipeCardIngredients()
         RecipeCardInstructions()
-        RecipeCardBottomNavigation()
+//        RecipeCardBottomNavigation()
     }
 }
 
