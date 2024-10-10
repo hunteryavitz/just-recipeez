@@ -2,54 +2,47 @@ package com.example.justrecipestest
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-private fun RecipeCardImageHeader() {
+private fun ImageHeader() {
     Image(
         painter = painterResource(id = R.drawable.header_01),
         contentDescription = "Header",
+        contentScale = ContentScale.Crop,
         modifier = Modifier
-            .fillMaxWidth()
-            .height(225.dp)
+            .size(128.dp)
+            .clip(CircleShape)
     )
 }
 
 @Composable
-private fun RecipeCardTitle() {
+private fun Title() {
     Text(
         text = "Grilled Steak with Potatoes",
-        fontSize = 24.sp,
-        modifier = Modifier.padding(top = 16.dp)
+        fontSize = 16.sp,
+        modifier = Modifier.padding(top = 8.dp)
     )
 }
 
 @Composable
-private fun RecipeCardServingsInfo() {
+private fun ServingsInfoSubtitle() {
     Text(
         text = "Serves: 2",
         fontSize = 12.sp,
@@ -58,7 +51,7 @@ private fun RecipeCardServingsInfo() {
 }
 
 @Composable
-private fun RecipeCardCookTimeInfo() {
+private fun CookTimeInfoSubtitle() {
     Text(
         text = "Cook Time: 45 minutes",
         fontSize = 12.sp,
@@ -67,22 +60,27 @@ private fun RecipeCardCookTimeInfo() {
 }
 
 @Composable
-private fun RecipeCardSubtitle() {
+private fun Subtitle() {
     Row {
-        RecipeCardServingsInfo()
-        RecipeCardCookTimeInfo()
+        ServingsInfoSubtitle()
+        CookTimeInfoSubtitle()
+    }
+}
+
+
+@Composable
+private fun Header() {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        ImageHeader()
+        Title()
+        Subtitle()
     }
 }
 
 @Composable
-private fun RecipeCardMainHeader() {
-    RecipeCardImageHeader()
-    RecipeCardTitle()
-    RecipeCardSubtitle()
-}
-
-@Composable
-private fun RecipeCardIngredientsHeader() {
+private fun IngredientsHeader() {
     Text(
         text = "Ingredients",
         fontSize = 20.sp,
@@ -91,7 +89,7 @@ private fun RecipeCardIngredientsHeader() {
 }
 
 @Composable
-private fun RecipeCardIngredients() {
+private fun Ingredients() {
     val ingredients = listOf(
         Ingredient("6 oz. steak", false),
         Ingredient("2 tbsp. olive oil", false),
@@ -99,12 +97,16 @@ private fun RecipeCardIngredients() {
         Ingredient("1/2 tsp. salt", false),
         Ingredient("1/4 tsp. pepper", false),
     )
-    RecipeCardIngredientsHeader()
-    IngredientListStateful(ingredients)
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        IngredientsHeader()
+        IngredientListStateful(ingredients)
+    }
 }
 
 @Composable
-private fun RecipeCardInstructionsHeader() {
+private fun InstructionsHeader() {
     Text(
         text = "Instructions",
         fontSize = 20.sp,
@@ -113,96 +115,20 @@ private fun RecipeCardInstructionsHeader() {
 }
 
 @Composable
-private fun RecipeCardInstruction() {
-    Row(
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth()
+private fun Instructions() {
+    val instructions = listOf(
+        Instruction("Preheat grill to medium-high heat.", false),
+        Instruction("Season steak with salt and pepper.", false),
+        Instruction("Grill steak for 5 minutes on each side.", false),
+        Instruction("Let steak rest for 5 minutes before slicing.", false),
+    )
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            horizontalAlignment = Alignment.End,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier.weight(1f)
-        ) {
-            Checkbox(
-                checked = false,
-                onCheckedChange = { /*TODO*/ },
-            )
-        }
-        Column(
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier.weight(2f) // Adjust the weight to center the text
-        ) {
-            Text(
-                text = "Grill steak for 5 minutes on each side",
-                fontSize = 12.sp,
-            )
-        }
+        InstructionsHeader()
+        InstructionListStateful(instructions)
     }
 }
-
-@Composable
-private fun RecipeCardInstructions() {
-    RecipeCardInstructionsHeader()
-    RecipeCardInstruction()
-    RecipeCardInstruction()
-    RecipeCardInstruction()
-}
-
-//@Composable
-//private fun RecipeCardBottomNavigation(modifier: Modifier = Modifier) {
-//    NavigationBar(
-//        containerColor = MaterialTheme.colorScheme.surfaceVariant,
-//        modifier = modifier
-//    ) {
-//        NavigationBarItem(
-//            icon = {
-//                Icon(
-//                    imageVector = Icons.Default.Home,
-//                    contentDescription = null
-//                )
-//            },
-//            label = {
-//                Text(
-//                    text = stringResource(R.string.bottom_navigation_home)
-//                )
-//            },
-//            selected = true,
-//            onClick = { /* TODO */ }
-//        )
-//        NavigationBarItem(
-//            icon = {
-//                Icon(
-//                    imageVector = Icons.Default.Notifications,
-//                    contentDescription = null
-//                )
-//            },
-//            label = {
-//                Text(
-//                    text = stringResource(R.string.bottom_navigation_timer)
-//                )
-//            },
-//            selected = false,
-//            onClick = { /* TODO */ }
-//        )
-//        NavigationBarItem(
-//            icon = {
-//                Icon(
-//                    imageVector = Icons.Default.Create,
-//                    contentDescription = null
-//                )
-//            },
-//            label = {
-//                Text(
-//                    text = stringResource(R.string.bottom_navigation_edit)
-//                )
-//            },
-//            selected = false,
-//            onClick = { /* TODO */ }
-//        )
-//    }
-//}
 
 @Composable
 fun RecipeCard(modifier: Modifier = Modifier) {
@@ -222,30 +148,36 @@ fun RecipeCardPortrait() {
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        RecipeCardMainHeader()
-        RecipeCardIngredients()
-        RecipeCardInstructions()
-//        RecipeCardBottomNavigation()
+        Header()
+        Ingredients()
+        Instructions()
     }
 }
 
 @Composable
 fun RecipeCardLandscape() {
     Row {
-//        NavBar()
-        Column {
-            Row {
-//            Header()
-//            Image()
-            }
-            Row {
-//            Body()
-            }
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.weight(0.5f)
+        ) {
+            Header()
+        }
+        Column(
+            modifier = Modifier.weight(0.8f)
+        ) {
+            Ingredients()
+        }
+        Column(
+            modifier = Modifier.weight(0.8f)
+        ) {
+            Instructions()
         }
     }
 }
 
-@Preview(showBackground = true, name = "Recipe Card Portrait")
+
+@Preview(showBackground = true, name = "Recipe Card Portrait", widthDp = 400, heightDp = 800)
 @Composable
 fun RecipeCardPreviewPortrait() {
     RecipeCard()
