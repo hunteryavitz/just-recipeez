@@ -1,6 +1,7 @@
 package com.example.justrecipestest
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 
@@ -21,14 +22,21 @@ fun IngredientList(
     ingredients: List<Ingredient>,
     onCheckedChange: (Int, Boolean) -> Unit
 ) {
-    Column {
-        ingredients.forEachIndexed { index, ingredient ->
+    LazyColumn {
+        itemsIndexed(ingredients) { index, ingredient ->
             IngredientStateless(
                 checked = ingredient.isChecked,
                 onCheckedChange = { onCheckedChange(index, it) },
                 ingredientText = ingredient.name
             )
         }
+//        ingredients.forEachIndexed { index, ingredient ->
+//            IngredientStateless(
+//                checked = ingredient.isChecked,
+//                onCheckedChange = { onCheckedChange(index, it) },
+//                ingredientText = ingredient.name
+//            )
+//        }
     }
 }
 

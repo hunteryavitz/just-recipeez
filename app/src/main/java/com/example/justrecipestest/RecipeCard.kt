@@ -1,15 +1,22 @@
 package com.example.justrecipestest
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,8 +34,8 @@ private fun ImageHeader() {
         contentDescription = "Header",
         contentScale = ContentScale.Crop,
         modifier = Modifier
-            .size(128.dp)
-            .clip(CircleShape)
+            .size(196.dp)
+            .clip(RoundedCornerShape(10.dp))
     )
 }
 
@@ -61,8 +68,11 @@ private fun CookTimeInfoSubtitle() {
 
 @Composable
 private fun Subtitle() {
-    Row {
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         ServingsInfoSubtitle()
+        Text(text = " | ", fontSize = 24.sp)
         CookTimeInfoSubtitle()
     }
 }
@@ -80,7 +90,7 @@ private fun Header() {
 }
 
 @Composable
-private fun IngredientsHeader() {
+private fun IngredientsHeader(modifier: Modifier) {
     Text(
         text = "Ingredients",
         fontSize = 20.sp,
@@ -97,16 +107,24 @@ private fun Ingredients() {
         Ingredient("1/2 tsp. salt", false),
         Ingredient("1/4 tsp. pepper", false),
     )
+    val (isExpanded, setIsExpanded) = remember { mutableStateOf(true) }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        IngredientsHeader()
-        IngredientListStateful(ingredients)
+        IngredientsHeader(modifier = Modifier.clickable { setIsExpanded(!isExpanded) })
+        AnimatedVisibility(
+            visible = isExpanded,
+            enter = expandVertically(animationSpec = spring()),
+            exit = shrinkVertically(animationSpec = spring())
+        ) {
+            IngredientListStateful(ingredients)
+        }
     }
 }
 
 @Composable
-private fun InstructionsHeader() {
+private fun InstructionsHeader(modifier: Modifier) {
     Text(
         text = "Instructions",
         fontSize = 20.sp,
@@ -122,11 +140,19 @@ private fun Instructions() {
         Instruction("Grill steak for 5 minutes on each side.", false),
         Instruction("Let steak rest for 5 minutes before slicing.", false),
     )
+    val (isExpanded, setIsExpanded) = remember { mutableStateOf(true) }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        InstructionsHeader()
-        InstructionListStateful(instructions)
+        InstructionsHeader(modifier = Modifier.clickable { setIsExpanded(!isExpanded) })
+        AnimatedVisibility(
+            visible = isExpanded,
+            enter = expandVertically(animationSpec = spring()),
+            exit = shrinkVertically(animationSpec = spring())
+        ) {
+            InstructionListStateful(instructions)
+        }
     }
 }
 
