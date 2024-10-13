@@ -8,6 +8,7 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -28,9 +29,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-private fun ImageHeader() {
+private fun ImageHeader(image: Int) {
     Image(
-        painter = painterResource(id = R.drawable.header_01),
+        painter = painterResource(image),
         contentDescription = "Header",
         contentScale = ContentScale.Crop,
         modifier = Modifier
@@ -40,52 +41,61 @@ private fun ImageHeader() {
 }
 
 @Composable
-private fun Title() {
+private fun Title(title: String) {
     Text(
-        text = "Grilled Steak with Potatoes",
+        text = title,
         fontSize = 16.sp,
         modifier = Modifier.padding(top = 8.dp)
     )
 }
 
 @Composable
-private fun ServingsInfoSubtitle() {
+private fun ServingsInfoSubtitle(servings: Int) {
     Text(
-        text = "Serves: 2",
+        text = "Serves: $servings",
         fontSize = 12.sp,
         modifier = Modifier.padding(4.dp)
     )
 }
 
 @Composable
-private fun CookTimeInfoSubtitle() {
+private fun CookTimeInfoSubtitle(prepTime: Int) {
     Text(
-        text = "Cook Time: 45 minutes",
+        text = "Cook Time: $prepTime minutes",
         fontSize = 12.sp,
         modifier = Modifier.padding(4.dp)
     )
 }
 
 @Composable
-private fun Subtitle() {
+private fun Subtitle(servings: Int, prepTime: Int) {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
-        ServingsInfoSubtitle()
+        ServingsInfoSubtitle(servings)
         Text(text = " | ", fontSize = 24.sp)
-        CookTimeInfoSubtitle()
+        CookTimeInfoSubtitle(prepTime)
     }
 }
 
+@Composable
+private fun Description(description: String) {
+    Text(
+        text = description,
+        fontSize = 14.sp,
+        modifier = Modifier.padding(8.dp)
+    )
+}
 
 @Composable
-private fun Header() {
+private fun Header(image: Int, title: String, servings: Int, prepTime: Int, description: String) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ImageHeader()
-        Title()
-        Subtitle()
+        ImageHeader(image)
+        Title(title)
+        Subtitle(servings, prepTime)
+        Description(description)
     }
 }
 
@@ -99,14 +109,14 @@ private fun IngredientsHeader(modifier: Modifier) {
 }
 
 @Composable
-private fun Ingredients() {
-    val ingredients = listOf(
-        Ingredient("6 oz. steak", false),
-        Ingredient("2 tbsp. olive oil", false),
-        Ingredient("1 clove garlic", false),
-        Ingredient("1/2 tsp. salt", false),
-        Ingredient("1/4 tsp. pepper", false),
-    )
+private fun Ingredients(ingredients: List<Ingredient>) {
+//    val ingredients = listOf(
+//        Ingredient("6 oz. steak", false),
+//        Ingredient("2 tbsp. olive oil", false),
+//        Ingredient("1 clove garlic", false),
+//        Ingredient("1/2 tsp. salt", false),
+//        Ingredient("1/4 tsp. pepper", false),
+//    )
     val (isExpanded, setIsExpanded) = remember { mutableStateOf(true) }
 
     Column(
@@ -133,13 +143,13 @@ private fun InstructionsHeader(modifier: Modifier) {
 }
 
 @Composable
-private fun Instructions() {
-    val instructions = listOf(
-        Instruction("Preheat grill to medium-high heat.", false),
-        Instruction("Season steak with salt and pepper.", false),
-        Instruction("Grill steak for 5 minutes on each side.", false),
-        Instruction("Let steak rest for 5 minutes before slicing.", false),
-    )
+private fun Instructions(instructions: List<Instruction>) {
+//    val instructions = listOf(
+//        Instruction("Preheat grill to medium-high heat.", false),
+//        Instruction("Season steak with salt and pepper.", false),
+//        Instruction("Grill steak for 5 minutes on each side.", false),
+//        Instruction("Let steak rest for 5 minutes before slicing.", false),
+//    )
     val (isExpanded, setIsExpanded) = remember { mutableStateOf(true) }
 
     Column(
@@ -157,66 +167,65 @@ private fun Instructions() {
 }
 
 @Composable
-fun RecipeCard(modifier: Modifier = Modifier) {
+fun RecipeCard(modifier: PaddingValues, recipe: Recipe) {
     val configuration = LocalConfiguration.current
     when (configuration.orientation) {
         Configuration.ORIENTATION_PORTRAIT ->
-            RecipeCardPortrait()
+            RecipeCardPortrait(recipe)
         Configuration.ORIENTATION_LANDSCAPE ->
-            RecipeCardLandscape()
-        else -> RecipeCardPortrait()
+            RecipeCardLandscape(recipe)
+        else -> RecipeCardPortrait(recipe)
     }
 }
 
 @Composable
-fun RecipeCardPortrait() {
+fun RecipeCardPortrait(recipe: Recipe) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Header()
-        Ingredients()
-        Instructions()
+        Header(recipe.image, recipe.title, recipe.servings, recipe.prepTime, recipe.description)
+        Ingredients(recipe.ingredients)
+        Instructions(recipe.instructions)
     }
 }
 
 @Composable
-fun RecipeCardLandscape() {
+fun RecipeCardLandscape(recipe: Recipe) {
     Row {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.weight(0.5f)
         ) {
-            Header()
+            Header(recipe.image, recipe.title, recipe.servings, recipe.prepTime, recipe.description)
         }
         Column(
             modifier = Modifier.weight(0.8f)
         ) {
-            Ingredients()
+            Ingredients(recipe.ingredients)
         }
         Column(
             modifier = Modifier.weight(0.8f)
         ) {
-            Instructions()
+            Instructions(recipe.instructions)
         }
     }
 }
 
-
 @Preview(showBackground = true, name = "Recipe Card Portrait", widthDp = 400, heightDp = 800)
 @Composable
 fun RecipeCardPreviewPortrait() {
-    RecipeCard()
+    RecipeCard(PaddingValues(0.dp), recipe)
 }
 
 @Preview(showBackground = true, name = "Recipe Card Landscape", widthDp = 800, heightDp = 400)
 @Composable
 fun RecipeCardPreviewLandscape() {
-    RecipeCard()
+    RecipeCard(PaddingValues(0.dp), recipe)
 }
 
 @Preview(showBackground = true, name = "Recipe Card Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun RecipeCardPreviewDark() {
-    RecipeCard()
+    RecipeCard(PaddingValues(0.dp), recipe)
 }

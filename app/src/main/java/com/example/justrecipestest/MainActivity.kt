@@ -14,11 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -26,11 +22,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -43,9 +36,48 @@ import com.example.justrecipestest.ui.theme.JustRecipesTestTheme
 
 // TODO: stub recipe card component
 
-val SnapshotStateListSaver: Saver<SnapshotStateList<String>, Any> = listSaver(
-    save = { stateList -> stateList.toList() },
-    restore = { savedList -> mutableStateListOf(*savedList.toTypedArray()) }
+//val SnapshotStateListSaver: Saver<SnapshotStateList<String>, Any> = listSaver(
+//    save = { stateList -> stateList.toList() },
+//    restore = { savedList -> mutableStateListOf(*savedList.toTypedArray()) }
+//)
+
+data class Recipe(
+    val image: Int,
+    val title: String,
+    val servings: Int,
+    val prepTime: Int,
+    val description: String,
+    val ingredients: List<Ingredient>,
+    val instructions: List<Instruction>
+)
+
+val recipe = Recipe(
+    image = R.drawable.header_02,
+    title = "Chocolate Cake",
+    servings = 8,
+    prepTime = 60,
+    description = "A delicious chocolate cake for all occasions",
+    ingredients = listOf(
+        Ingredient("Flour", false),
+        Ingredient("Sugar", false),
+        Ingredient("Cocoa Powder", false),
+        Ingredient("Baking Powder", false),
+        Ingredient("Baking Soda", false),
+        Ingredient("Salt", false),
+        Ingredient("Eggs", false),
+        Ingredient("Milk", false),
+        Ingredient("Vegetable Oil", false),
+        Ingredient("Vanilla Extract", false),
+        Ingredient("Boiling Water", false)
+    ),
+    instructions = listOf(
+        Instruction("Preheat oven to 350°F (180°C). Grease and flour two 9-inch round baking pans.", false),
+        Instruction("Stir together sugar, flour, cocoa, baking powder, baking soda, and salt in large bowl.", false),
+        Instruction("Add eggs, milk, oil, and vanilla; beat on medium speed of mixer 2 minutes.", false),
+        Instruction("Stir in boiling water (batter will be thin). Pour batter into prepared pans.", false),
+        Instruction("Bake 30 to 35 minutes or until wooden pick inserted in center comes out clean.", false),
+        Instruction("Cool 10 minutes; remove from pans to wire racks. Cool completely.", false)
+    )
 )
 
 class MainActivity : ComponentActivity() {
@@ -54,20 +86,21 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             JustRecipesTestTheme {
-                val names = rememberSaveable(saver = SnapshotStateListSaver) {
-                    mutableStateListOf("Recipe 1")
-                }
+//                val names = rememberSaveable(saver = SnapshotStateListSaver) {
+//                    mutableStateListOf("Recipe 1")
+//                }
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    floatingActionButton = {
-                        FloatingActionButton(onClick = {
-                            addItemToList(names)
-                        }) {
-                            Icon(Icons.Filled.Add, contentDescription = "Add")
-                        }
-                    }
+//                    floatingActionButton = {
+//                        FloatingActionButton(onClick = {
+//                            addItemToList(names)
+//                        }) {
+//                            Icon(Icons.Filled.Add, contentDescription = "Add")
+//                        }
+//                    }
                 ) { innerPadding ->
-                    Main(innerPadding, names)
+//                    Main(innerPadding, names)
+                    RecipeCard(innerPadding, recipe)
                 }
             }
         }
