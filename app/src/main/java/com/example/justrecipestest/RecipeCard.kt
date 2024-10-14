@@ -1,11 +1,13 @@
 package com.example.justrecipestest
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
@@ -100,29 +103,37 @@ private fun Header(image: Int, title: String, servings: Int, prepTime: Int, desc
 }
 
 @Composable
-private fun IngredientsHeader(modifier: Modifier) {
+private fun IngredientsHeader(
+    modifier: Modifier,
+    onHeaderClicked: () -> Unit
+) {
     Text(
         text = "Ingredients",
         fontSize = 20.sp,
-        modifier = Modifier.padding(16.dp)
+        modifier = modifier
+            .clickable(onClick = {
+                Log.d(">> Ingredients", "Header clicked CHILD")
+                onHeaderClicked()
+            })
+            .background(Color.LightGray) // To see the clickable area
+            .padding(16.dp),
     )
 }
 
 @Composable
 private fun Ingredients(ingredients: List<Ingredient>) {
-//    val ingredients = listOf(
-//        Ingredient("6 oz. steak", false),
-//        Ingredient("2 tbsp. olive oil", false),
-//        Ingredient("1 clove garlic", false),
-//        Ingredient("1/2 tsp. salt", false),
-//        Ingredient("1/4 tsp. pepper", false),
-//    )
     val (isExpanded, setIsExpanded) = remember { mutableStateOf(true) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        IngredientsHeader(modifier = Modifier.clickable { setIsExpanded(!isExpanded) })
+        IngredientsHeader(
+            modifier = Modifier,
+            onHeaderClicked = {
+                setIsExpanded(!isExpanded)
+                Log.d(">> Ingredients", "Header clicked PARENT")
+            }
+        )
         AnimatedVisibility(
             visible = isExpanded,
             enter = expandVertically(animationSpec = spring()),

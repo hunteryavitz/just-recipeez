@@ -90,7 +90,8 @@ class MainActivity : ComponentActivity() {
 //                    mutableStateListOf("Recipe 1")
 //                }
                 Scaffold(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize()
+                        .padding(32.dp),
 //                    floatingActionButton = {
 //                        FloatingActionButton(onClick = {
 //                            addItemToList(names)
