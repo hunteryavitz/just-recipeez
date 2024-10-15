@@ -30,13 +30,6 @@ fun IngredientList(
                 ingredientText = ingredient.name
             )
         }
-//        ingredients.forEachIndexed { index, ingredient ->
-//            IngredientStateless(
-//                checked = ingredient.isChecked,
-//                onCheckedChange = { onCheckedChange(index, it) },
-//                ingredientText = ingredient.name
-//            )
-//        }
     }
 }
 

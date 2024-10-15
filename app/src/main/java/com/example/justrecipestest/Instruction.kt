@@ -50,7 +50,7 @@ fun InstructionStateless(
         Column(
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Center,
-            modifier = Modifier.weight(2f) // Adjust the weight to center the text
+            modifier = Modifier.weight(2f)
         ) {
             Text(
                 text = instructionText,

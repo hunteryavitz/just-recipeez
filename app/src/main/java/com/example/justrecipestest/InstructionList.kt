@@ -30,13 +30,6 @@ fun InstructionList(
                 instructionText = instruction.name
             )
         }
-//        instructions.forEachIndexed { index, instruction ->
-//            InstructionStateless(
-//                checked = instruction.isChecked,
-//                onCheckedChange = { onCheckedChange(index, it) },
-//                instructionText = instruction.name
-//            )
-//        }
     }
 }
 

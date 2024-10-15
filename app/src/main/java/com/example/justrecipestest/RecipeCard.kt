@@ -1,13 +1,11 @@
 package com.example.justrecipestest
 
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
@@ -90,15 +87,23 @@ private fun Description(description: String) {
     )
 }
 
+data class Header(
+    val image: Int,
+    val title: String,
+    val servings: Int,
+    val prepTime: Int,
+    val description: String
+)
+
 @Composable
-private fun Header(image: Int, title: String, servings: Int, prepTime: Int, description: String) {
+private fun Header(header: Header) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ImageHeader(image)
-        Title(title)
-        Subtitle(servings, prepTime)
-        Description(description)
+        ImageHeader(header.image)
+        Title(header.title)
+        Subtitle(header.servings, header.prepTime)
+        Description(header.description)
     }
 }
 
@@ -111,11 +116,7 @@ private fun IngredientsHeader(
         text = "Ingredients",
         fontSize = 20.sp,
         modifier = modifier
-            .clickable(onClick = {
-                Log.d(">> Ingredients", "Header clicked CHILD")
-                onHeaderClicked()
-            })
-            .background(Color.LightGray) // To see the clickable area
+            .clickable(onClick = { onHeaderClicked() })
             .padding(16.dp),
     )
 }
@@ -129,10 +130,7 @@ private fun Ingredients(ingredients: List<Ingredient>) {
     ) {
         IngredientsHeader(
             modifier = Modifier,
-            onHeaderClicked = {
-                setIsExpanded(!isExpanded)
-                Log.d(">> Ingredients", "Header clicked PARENT")
-            }
+            onHeaderClicked = { setIsExpanded(!isExpanded) }
         )
         AnimatedVisibility(
             visible = isExpanded,
@@ -145,28 +143,30 @@ private fun Ingredients(ingredients: List<Ingredient>) {
 }
 
 @Composable
-private fun InstructionsHeader(modifier: Modifier) {
+private fun InstructionsHeader(
+    modifier: Modifier,
+    onHeaderClicked: () -> Unit
+) {
     Text(
         text = "Instructions",
         fontSize = 20.sp,
-        modifier = Modifier.padding(16.dp)
+        modifier = modifier
+            .clickable(onClick = { onHeaderClicked() })
+            .padding(16.dp)
     )
 }
 
 @Composable
 private fun Instructions(instructions: List<Instruction>) {
-//    val instructions = listOf(
-//        Instruction("Preheat grill to medium-high heat.", false),
-//        Instruction("Season steak with salt and pepper.", false),
-//        Instruction("Grill steak for 5 minutes on each side.", false),
-//        Instruction("Let steak rest for 5 minutes before slicing.", false),
-//    )
     val (isExpanded, setIsExpanded) = remember { mutableStateOf(true) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        InstructionsHeader(modifier = Modifier.clickable { setIsExpanded(!isExpanded) })
+        InstructionsHeader(
+            modifier = Modifier,
+            onHeaderClicked = { setIsExpanded(!isExpanded) }
+        )
         AnimatedVisibility(
             visible = isExpanded,
             enter = expandVertically(animationSpec = spring()),
@@ -191,11 +191,13 @@ fun RecipeCard(modifier: PaddingValues, recipe: Recipe) {
 
 @Composable
 fun RecipeCardPortrait(recipe: Recipe) {
+    val header = Header(recipe.image, recipe.title, recipe.servings, recipe.prepTime, recipe.description)
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Header(recipe.image, recipe.title, recipe.servings, recipe.prepTime, recipe.description)
+        Header(header)
         Ingredients(recipe.ingredients)
         Instructions(recipe.instructions)
     }
@@ -203,12 +205,14 @@ fun RecipeCardPortrait(recipe: Recipe) {
 
 @Composable
 fun RecipeCardLandscape(recipe: Recipe) {
+    val header = Header(recipe.image, recipe.title, recipe.servings, recipe.prepTime, recipe.description)
+
     Row {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.weight(0.5f)
         ) {
-            Header(recipe.image, recipe.title, recipe.servings, recipe.prepTime, recipe.description)
+            Header(header)
         }
         Column(
             modifier = Modifier.weight(0.8f)
