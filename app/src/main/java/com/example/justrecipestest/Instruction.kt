@@ -44,7 +44,7 @@ fun InstructionStateless(
         ) {
             Checkbox(
                 checked = checked,
-                onCheckedChange = { onCheckedChange },
+                onCheckedChange = onCheckedChange,
             )
         }
         Column(

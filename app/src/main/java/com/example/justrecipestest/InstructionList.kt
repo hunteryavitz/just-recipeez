@@ -3,16 +3,18 @@ package com.example.justrecipestest
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 
 @Composable
 fun InstructionListStateful(instructions: List<Instruction>) {
-    val instructionStates = remember { instructions.toMutableList() }
+    val instructionStates = remember { mutableStateListOf(*instructions.toTypedArray()) }
 
     InstructionList(
         instructions = instructionStates,
         onCheckedChange = { index, checked ->
-            instructionStates[index].isChecked = checked
+            val updatedInstruction = instructionStates[index].copy(isChecked = checked)
+            instructionStates[index] = updatedInstruction
         }
     )
 }
@@ -35,5 +37,5 @@ fun InstructionList(
 
 data class Instruction(
     val name: String,
-    var isChecked: Boolean
+    val isChecked: Boolean
 )

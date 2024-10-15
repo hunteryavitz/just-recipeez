@@ -71,11 +71,11 @@ val recipe = Recipe(
         Ingredient("Boiling Water", false)
     ),
     instructions = listOf(
-        Instruction("Preheat oven to 350°F (180°C). Grease and flour two 9-inch round baking pans.", true),
+        Instruction("Preheat oven to 350°F (180°C). Grease and flour two 9-inch round baking pans.", false),
         Instruction("Stir together sugar, flour, cocoa, baking powder, baking soda, and salt in large bowl.", false),
-        Instruction("Add eggs, milk, oil, and vanilla; beat on medium speed of mixer 2 minutes.", true),
+        Instruction("Add eggs, milk, oil, and vanilla; beat on medium speed of mixer 2 minutes.", false),
         Instruction("Stir in boiling water (batter will be thin). Pour batter into prepared pans.", false),
-        Instruction("Bake 30 to 35 minutes or until wooden pick inserted in center comes out clean.", true),
+        Instruction("Bake 30 to 35 minutes or until wooden pick inserted in center comes out clean.", false),
         Instruction("Cool 10 minutes; remove from pans to wire racks. Cool completely.", false)
     )
 )
