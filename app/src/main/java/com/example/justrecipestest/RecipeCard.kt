@@ -7,13 +7,16 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -195,7 +198,7 @@ fun RecipeCardPortrait(recipe: Recipe) {
 
     Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Header(header)
         Ingredients(recipe.ingredients)
@@ -215,12 +218,12 @@ fun RecipeCardLandscape(recipe: Recipe) {
             Header(header)
         }
         Column(
-            modifier = Modifier.weight(0.8f)
+            modifier = Modifier.weight(0.25f)
         ) {
             Ingredients(recipe.ingredients)
         }
         Column(
-            modifier = Modifier.weight(0.8f)
+            modifier = Modifier.weight(0.25f)
         ) {
             Instructions(recipe.instructions)
         }

@@ -2,9 +2,11 @@ package com.example.justrecipestest
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.OutlinedTextFieldDefaults.contentPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun IngredientListStateful(ingredients: List<Ingredient>) {
@@ -24,7 +26,9 @@ fun IngredientList(
     ingredients: List<Ingredient>,
     onCheckedChange: (Int, Boolean) -> Unit
 ) {
-    LazyColumn {
+    LazyColumn(
+        contentPadding = contentPadding(16.dp)
+    ) {
         itemsIndexed(ingredients) { index, ingredient ->
             IngredientStateless(
                 checked = ingredient.isChecked,
