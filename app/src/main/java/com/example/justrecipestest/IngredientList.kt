@@ -5,12 +5,21 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.OutlinedTextFieldDefaults.contentPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun IngredientListStateful(ingredients: List<Ingredient>) {
-    val ingredientStates = remember { mutableStateListOf(*ingredients.toTypedArray()) }
+    val ingredientStates = rememberSaveable(
+        saver = listSaver(
+            save = { stateList -> stateList.map { listOf(it.name, it.isChecked) } },
+            restore = { savedList ->
+                mutableStateListOf(*savedList.map { Ingredient(it[0] as String, it[1] as Boolean) }.toTypedArray())
+            }
+        )
+    ) { mutableStateListOf(*ingredients.map { it.copy() }.toTypedArray()) }
 
     IngredientList(
         ingredients = ingredientStates,
@@ -42,4 +51,9 @@ fun IngredientList(
 data class Ingredient(
     val name: String,
     val isChecked: Boolean
+)
+
+val IngredientSaver: Saver<Ingredient, Any> = listSaver(
+    save = { listOf(it.name, it.isChecked) },
+    restore = { Ingredient(name = it[0] as String, isChecked = it[1] as Boolean) }
 )

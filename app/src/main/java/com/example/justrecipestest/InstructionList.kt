@@ -4,11 +4,20 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
 
 @Composable
 fun InstructionListStateful(instructions: List<Instruction>) {
-    val instructionStates = remember { mutableStateListOf(*instructions.toTypedArray()) }
+    val instructionStates = rememberSaveable(
+        saver = listSaver(
+            save = { stateList -> stateList.map { listOf(it.name, it.isChecked) } },
+            restore = { savedList ->
+                mutableStateListOf(*savedList.map { Instruction(it[0] as String, it[1] as Boolean) }.toTypedArray())
+            }
+        )
+    ) { mutableStateListOf(*instructions.map { it.copy() }.toTypedArray()) }
 
     InstructionList(
         instructions = instructionStates,
@@ -38,4 +47,9 @@ fun InstructionList(
 data class Instruction(
     val name: String,
     val isChecked: Boolean
+)
+
+val InstructionSaver: Saver<Instruction, Any> = listSaver(
+    save = { listOf(it.name, it.isChecked) },
+    restore = { Instruction(name = it[0] as String, isChecked = it[1] as Boolean) }
 )
