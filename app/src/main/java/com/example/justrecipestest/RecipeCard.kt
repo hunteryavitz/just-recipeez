@@ -6,6 +6,7 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,9 +15,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
@@ -27,6 +33,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
@@ -105,6 +112,7 @@ private fun Header(header: Header, modifier: Modifier = Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
+            .background(color = MaterialTheme.colorScheme.secondary)
     ) {
         ImageHeader(header.image)
         Title(header.title)
@@ -137,7 +145,10 @@ private fun Ingredients(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.padding(4.dp)
+        modifier = modifier
+            .padding(4.dp)
+            .background(color = MaterialTheme.colorScheme.secondary)
+            .heightIn(100.dp)
     ) {
         IngredientsHeader(
             onHeaderClicked = { setIsExpanded(!isExpanded) },
@@ -203,7 +214,9 @@ private fun Instructions(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.padding(4.dp)
+        modifier = modifier
+            .padding(4.dp)
+            .background(color = MaterialTheme.colorScheme.secondary)
     ) {
         InstructionsHeader(
             onHeaderClicked = { setIsExpanded(!isExpanded) },
@@ -295,6 +308,8 @@ fun RecipeCardPortrait(
     onInstructionsCheckedChange: (Int, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val scrollState = rememberScrollState()
+
     val header = Header(
         recipe.image,
         recipe.title,
@@ -306,23 +321,26 @@ fun RecipeCardPortrait(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top,
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .padding(2.dp)
+            .verticalScroll(scrollState)
     ) {
-        Header(header = header, modifier = modifier)
-        Spacer(modifier = modifier.size(4.dp))
+        Header(
+            header = header,
+            modifier = Modifier
+        )
+        Spacer(modifier = Modifier.size(4.dp))
         Ingredients(
             ingredients = ingredients,
             onCheckedChange = onIngredientsCheckedChange,
-            modifier = modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         )
-
-        Spacer(modifier = modifier.size(16.dp))
+        Spacer(modifier = Modifier.size(4.dp))
         Instructions(
             instructions = instructions,
             onCheckedChange = onInstructionsCheckedChange,
-            modifier = modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }

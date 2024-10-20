@@ -1,11 +1,14 @@
 package com.example.justrecipestest
 
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun InstructionListStateful(instructions: List<Instruction>) {
@@ -31,7 +34,7 @@ fun InstructionListStateless(
     instructions: List<Instruction>,
     onCheckedChange: (Int, Boolean) -> Unit
 ) {
-    LazyColumn {
+    LazyColumn(modifier = Modifier.heightIn(max = 300.dp)) {
         itemsIndexed(instructions) { index, instruction ->
             InstructionStateless(
                 checked = instruction.isChecked,
