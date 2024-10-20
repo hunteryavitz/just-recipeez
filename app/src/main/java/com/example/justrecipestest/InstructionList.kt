@@ -4,7 +4,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 
@@ -19,17 +18,16 @@ fun InstructionListStateful(instructions: List<Instruction>) {
         )
     ) { mutableStateListOf(*instructions.map { it.copy() }.toTypedArray()) }
 
-    InstructionList(
+    InstructionListStateless (
         instructions = instructionStates,
         onCheckedChange = { index, checked ->
-            val updatedInstruction = instructionStates[index].copy(isChecked = checked)
-            instructionStates[index] = updatedInstruction
+            instructionStates[index] = instructionStates[index].copy(isChecked = checked)
         }
     )
 }
 
 @Composable
-fun InstructionList(
+fun InstructionListStateless(
     instructions: List<Instruction>,
     onCheckedChange: (Int, Boolean) -> Unit
 ) {
@@ -37,19 +35,9 @@ fun InstructionList(
         itemsIndexed(instructions) { index, instruction ->
             InstructionStateless(
                 checked = instruction.isChecked,
-                onCheckedChange = { onCheckedChange(index, it) },
-                instructionText = instruction.name
+                instructionText = instruction.name,
+                onCheckedChange = { onCheckedChange(index, it) }
             )
         }
     }
 }
-
-data class Instruction(
-    val name: String,
-    val isChecked: Boolean
-)
-
-val InstructionSaver: Saver<Instruction, Any> = listSaver(
-    save = { listOf(it.name, it.isChecked) },
-    restore = { Instruction(name = it[0] as String, isChecked = it[1] as Boolean) }
-)

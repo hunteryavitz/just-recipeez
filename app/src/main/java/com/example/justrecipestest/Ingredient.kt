@@ -9,30 +9,34 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun IngredientStateful(ingredientText: String) {
-    var isChecked by remember { mutableStateOf(false) }
+fun IngredientStateful(
+    ingredient: Ingredient,
+    onIngredientCheckedChanged: (Ingredient) -> Unit
+) {
+    var isChecked by rememberSaveable { mutableStateOf(ingredient.isChecked) }
 
     IngredientStateless(
         checked = isChecked,
-        onCheckedChange = { isChecked = it },
-        ingredientText = ingredientText
+        ingredientText = ingredient.name,
+        onCheckedChange = {
+            isChecked = it
+            onIngredientCheckedChanged(ingredient.copy(isChecked = it))
+        }
     )
 }
 
 @Composable
 fun IngredientStateless(
     checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
-    ingredientText: String
+    ingredientText: String,
+    onCheckedChange: (Boolean) -> Unit
 ) {
     Row(
         horizontalArrangement = Arrangement.Start,
@@ -61,3 +65,8 @@ fun IngredientStateless(
         }
     }
 }
+
+data class Ingredient(
+    val name: String,
+    val isChecked: Boolean
+)
