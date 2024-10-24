@@ -1,5 +1,6 @@
 package com.example.justrecipestest
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -8,6 +9,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -32,15 +34,36 @@ fun InstructionListStateful(instructions: List<Instruction>) {
 @Composable
 fun InstructionListStateless(
     instructions: List<Instruction>,
-    onCheckedChange: (Int, Boolean) -> Unit
+    onCheckedChange: (Int, Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    LazyColumn(modifier = Modifier.heightIn(max = 300.dp)) {
-        itemsIndexed(instructions) { index, instruction ->
-            InstructionStateless(
-                checked = instruction.isChecked,
-                instructionText = instruction.name,
-                onCheckedChange = { onCheckedChange(index, it) }
-            )
+    LazyColumn(modifier = modifier
+        .heightIn(max = 400.dp),
+        contentPadding = PaddingValues(vertical = 16.dp),
+        content = {
+            itemsIndexed(instructions) { index, instruction ->
+                InstructionStateless(
+                    checked = instruction.isChecked,
+                    instructionText = instruction.name,
+                    onCheckedChange = { onCheckedChange(index, it) }
+                )
+            }
         }
-    }
+    )
+}
+
+@Preview
+@Composable
+fun InstructionListPreview() {
+    InstructionListStateful(
+        instructions = listOf(
+            Instruction("Preheat oven to 350°F", false),
+            Instruction("Mix dry ingredients", false),
+            Instruction("Mix wet ingredients", false),
+            Instruction("Combine wet and dry ingredients", false),
+            Instruction("Pour into pan", false),
+            Instruction("Bake for 30 minutes", false),
+            Instruction("Cool and serve", false),
+        )
+    )
 }

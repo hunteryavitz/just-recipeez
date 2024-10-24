@@ -7,6 +7,7 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,9 +20,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,10 +32,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -50,72 +49,101 @@ data class Header(
 
 @Composable
 private fun ImageHeader(image: Int) {
-    Image(
-        painter = painterResource(image),
-        contentDescription = "Header",
-        contentScale = ContentScale.Crop,
-        modifier = Modifier
-            .size(196.dp)
-            .clip(RoundedCornerShape(10.dp))
-    )
+    Row(modifier = Modifier
+        .padding(8.dp)) {
+        Image(
+            painter = painterResource(image),
+            contentDescription = "Header",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(128.dp)
+                .clip(RoundedCornerShape(14.dp))
+        )
+    }
 }
 
 @Composable
 private fun Title(title: String) {
-    Text(
-        text = title,
-        fontSize = 16.sp,
-        modifier = Modifier.padding(top = 8.dp)
-    )
+    Row(modifier = Modifier
+        .padding(8.dp)) {
+        Text(
+            text = title,
+            fontSize = 22.sp
+        )
+    }
 }
 
 @Composable
 private fun ServingsInfoSubtitle(servings: Int) {
     Text(
-        text = "Serves: $servings",
-        fontSize = 12.sp,
-        modifier = Modifier.padding(4.dp)
+        text = "SERVES $servings",
+        fontSize = 14.sp
     )
 }
 
 @Composable
 private fun CookTimeInfoSubtitle(prepTime: Int) {
     Text(
-        text = "Prep Time: $prepTime minutes",
-        fontSize = 12.sp,
-        modifier = Modifier.padding(4.dp)
+        text = "$prepTime MIN",
+        fontSize = 14.sp
     )
 }
 
 @Composable
 private fun Subtitle(servings: Int, prepTime: Int) {
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .padding(4.dp)
     ) {
-        ServingsInfoSubtitle(servings)
-        Text(text = " | ", fontSize = 24.sp)
-        CookTimeInfoSubtitle(prepTime)
+        Column(modifier = Modifier
+            .padding(4.dp)
+            .weight(1f),
+            horizontalAlignment = Alignment.End
+        ) {
+            ServingsInfoSubtitle(servings)
+        }
+        Column(modifier = Modifier
+            .padding(4.dp)
+        ) {
+            Text(text = " | ", fontSize = 24.sp)
+        }
+        Column(modifier = Modifier
+            .padding(4.dp)
+            .weight(1f),
+            horizontalAlignment = Alignment.Start
+        ) {
+            CookTimeInfoSubtitle(prepTime)
+        }
     }
 }
 
 @Composable
 private fun Description(description: String) {
-    Text(
-        text = description,
-        fontSize = 10.sp,
-        modifier = Modifier.padding(4.dp)
-    )
+    Row(modifier = Modifier
+        .padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = description,
+            fontSize = 14.sp
+        )
+    }
 }
 
 @Composable
 private fun Header(header: Header, modifier: Modifier = Modifier) {
+    val (isExpanded, setIsExpanded) = remember { mutableStateOf(true) }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .background(color = MaterialTheme.colorScheme.secondary)
+            .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f), RoundedCornerShape(8.dp))
+
     ) {
-        ImageHeader(header.image)
         Title(header.title)
+        ImageHeader(header.image)
         Subtitle(header.servings, header.prepTime)
         Description(header.description)
     }
@@ -126,13 +154,18 @@ private fun IngredientsHeader(
     modifier: Modifier = Modifier,
     onHeaderClicked: () -> Unit
 ) {
-    Text(
-        text = "Ingredients",
-        fontSize = 20.sp,
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .clickable(onClick = onHeaderClicked)
-            .padding(4.dp)
-    )
+            .padding(12.dp)
+            .fillMaxWidth()
+    ) {
+        Text(
+            text = "Ingredients",
+            fontSize = 20.sp
+        )
+    }
 }
 
 @Composable
@@ -146,9 +179,7 @@ private fun Ingredients(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .padding(4.dp)
-            .background(color = MaterialTheme.colorScheme.secondary)
-            .heightIn(100.dp)
+            .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f), RoundedCornerShape(8.dp))
     ) {
         IngredientsHeader(
             onHeaderClicked = { setIsExpanded(!isExpanded) },
@@ -161,47 +192,30 @@ private fun Ingredients(
         ) {
             IngredientListStateless(
                 ingredients = ingredients,
-                onCheckedChange = onCheckedChange
+                onCheckedChange = onCheckedChange,
+                modifier = Modifier.padding(vertical = 4.dp)
             )
         }
     }
 }
-
-//@Composable
-//private fun Ingredients(ingredients: List<Ingredient>, modifier: Modifier) {
-//    val (isExpanded, setIsExpanded) = remember { mutableStateOf(true) }
-//
-//    Column(
-//        horizontalAlignment = Alignment.CenterHorizontally,
-//        modifier = Modifier.padding(16.dp)
-//    ) {
-//        IngredientsHeader(
-//            modifier = Modifier,
-//            onHeaderClicked = { setIsExpanded(!isExpanded) }
-//        )
-//        AnimatedVisibility(
-//            visible = isExpanded,
-//            enter = expandVertically(animationSpec = spring()),
-//            exit = shrinkVertically(animationSpec = spring())
-//        ) {
-//            IngredientListStateful(ingredients)
-//        }
-//    }
-//}
-//
 
 @Composable
 private fun InstructionsHeader(
     modifier: Modifier = Modifier,
     onHeaderClicked: () -> Unit
 ) {
-    Text(
-        text = "Instructions",
-        fontSize = 20.sp,
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .clickable(onClick = onHeaderClicked)
-            .padding(4.dp)
-    )
+            .padding(12.dp)
+            .fillMaxWidth()
+    ) {
+        Text(
+            text = "Instructions",
+            fontSize = 20.sp
+        )
+    }
 }
 
 @Composable
@@ -215,8 +229,7 @@ private fun Instructions(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .padding(4.dp)
-            .background(color = MaterialTheme.colorScheme.secondary)
+            .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f), RoundedCornerShape(8.dp))
     ) {
         InstructionsHeader(
             onHeaderClicked = { setIsExpanded(!isExpanded) },
@@ -229,7 +242,8 @@ private fun Instructions(
         ) {
             InstructionListStateless(
                 instructions = instructions,
-                onCheckedChange = onCheckedChange
+                onCheckedChange = onCheckedChange,
+                modifier = Modifier.padding(vertical = 4.dp)
             )
         }
     }
@@ -261,7 +275,6 @@ fun RecipeCard(modifier: PaddingValues, recipe: Recipe) {
         Configuration.ORIENTATION_PORTRAIT ->
             RecipeCardPortrait(
                 recipe = recipe,
-                modifier = Modifier,
                 ingredients = ingredientStates,
                 onIngredientsCheckedChange = { index, checked ->
                     ingredientStates[index] = ingredientStates[index].copy(isChecked = checked)
@@ -286,7 +299,6 @@ fun RecipeCard(modifier: PaddingValues, recipe: Recipe) {
             )
         else -> RecipeCardPortrait(
             recipe,
-            modifier = Modifier,
             ingredients = ingredientStates,
             onIngredientsCheckedChange = { index, checked ->
                 ingredientStates[index] = ingredientStates[index].copy(isChecked = checked)
@@ -305,10 +317,9 @@ fun RecipeCardPortrait(
     ingredients: List<Ingredient>,
     onIngredientsCheckedChange: (Int, Boolean) -> Unit,
     instructions: List<Instruction>,
-    onInstructionsCheckedChange: (Int, Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    onInstructionsCheckedChange: (Int, Boolean) -> Unit
 ) {
-    val scrollState = rememberScrollState()
+//    val scrollState = rememberScrollState()
 
     val header = Header(
         recipe.image,
@@ -318,30 +329,46 @@ fun RecipeCardPortrait(
         recipe.description
     )
 
-    Column(
+    LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top,
+//        verticalArrangement = Arrangement.Top,
         modifier = Modifier
             .fillMaxSize()
-            .padding(2.dp)
-            .verticalScroll(scrollState)
+//            .verticalScroll(scrollState)
     ) {
-        Header(
-            header = header,
-            modifier = Modifier
-        )
-        Spacer(modifier = Modifier.size(4.dp))
-        Ingredients(
-            ingredients = ingredients,
-            onCheckedChange = onIngredientsCheckedChange,
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.size(4.dp))
-        Instructions(
-            instructions = instructions,
-            onCheckedChange = onInstructionsCheckedChange,
-            modifier = Modifier.fillMaxWidth()
-        )
+        item {
+            Header(
+                header = header,
+                modifier = Modifier
+                    .heightIn(min = 200.dp)
+                    .fillMaxWidth()
+            )
+
+        }
+        item {
+            Spacer(modifier = Modifier.size(4.dp))
+        }
+        item {
+            Ingredients(
+                ingredients = ingredients,
+                onCheckedChange = onIngredientsCheckedChange,
+                modifier = Modifier
+                    .fillMaxWidth()
+//                    .weight(1f)
+            )
+        }
+        item {
+            Spacer(modifier = Modifier.size(4.dp))
+        }
+        item {
+            Instructions(
+                instructions = instructions,
+                onCheckedChange = onInstructionsCheckedChange,
+                modifier = Modifier
+                    .fillMaxWidth()
+//                    .weight(1f)
+            )
+        }
     }
 }
 
@@ -360,44 +387,60 @@ fun RecipeCardLandscape(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier
+                .weight(1f)
         ) {
-            Header(
-                header = header,
-                modifier = modifier
-            )
+            Row(modifier = modifier
+                .padding(12.dp)) {
+                Header(
+                    header = header,
+                    modifier = modifier
+                )
+            }
         }
         Column(
             modifier = modifier
+                .weight(1f)
         ) {
-            Ingredients(
-                ingredients,
-                onCheckedChange = onIngredientsCheckedChange,
-                modifier = modifier,
-            )
+            Row(modifier = modifier
+                .weight(1f)
+                .padding(12.dp)
+            ){
+                Ingredients(
+                    ingredients,
+                    onCheckedChange = onIngredientsCheckedChange,
+                    modifier = modifier,
+                )
+            }
         }
         Column(
             modifier = modifier
+                .weight(1f)
         ) {
-            Instructions(
-                instructions,
-                onCheckedChange = onInstructionsCheckedChange,
-                modifier = modifier
-            )
+            Row(modifier = modifier
+                .weight(1f)
+                .padding(12.dp)
+            ) {
+                Instructions(
+                    instructions,
+                    onCheckedChange = onInstructionsCheckedChange,
+                    modifier = modifier
+                )
+            }
         }
     }
 }
 
-//@Preview(showBackground = true, name = "Recipe Card Portrait", widthDp = 400, heightDp = 800)
-//@Composable
-//fun RecipeCardPreviewPortrait() {
-//    RecipeCard(PaddingValues(0.dp), recipe)
-//}
+@Preview(showBackground = true, name = "Recipe Card Portrait", widthDp = 400, heightDp = 800)
+@Composable
+fun RecipeCardPreviewPortrait() {
+    RecipeCard(PaddingValues(0.dp), recipe)
+}
 
-//@Preview(showBackground = true, name = "Recipe Card Landscape", widthDp = 800, heightDp = 400)
-//@Composable
-//fun RecipeCardPreviewLandscape() {
-//    RecipeCard(PaddingValues(0.dp), recipe)
-//}
+@Preview(showBackground = true, name = "Recipe Card Landscape", widthDp = 800, heightDp = 400)
+@Composable
+fun RecipeCardPreviewLandscape() {
+    RecipeCard(PaddingValues(0.dp), recipe)
+}
 
 //@Preview(showBackground = true, name = "Recipe Card Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
 //@Composable
