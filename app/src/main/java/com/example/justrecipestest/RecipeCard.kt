@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -32,6 +33,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
@@ -140,7 +142,6 @@ private fun Header(header: Header, modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f), RoundedCornerShape(8.dp))
-
     ) {
         Title(header.title)
         ImageHeader(header.image)
@@ -329,45 +330,63 @@ fun RecipeCardPortrait(
         recipe.description
     )
 
-    LazyColumn(
-        horizontalAlignment = Alignment.CenterHorizontally,
-//        verticalArrangement = Arrangement.Top,
+    Box(
         modifier = Modifier
-            .fillMaxSize()
-//            .verticalScroll(scrollState)
+            .fillMaxSize() // Fill the available space
     ) {
-        item {
-            Header(
-                header = header,
-                modifier = Modifier
-                    .heightIn(min = 200.dp)
-                    .fillMaxWidth()
-            )
+        // Background Image
+        Image(
+            painter = painterResource(id = R.drawable.background_image_01), // Replace with your image resource
+            contentDescription = null, // Decorative background image
+            contentScale = ContentScale.Crop, // Adjust as needed (Crop, Fit, FillBounds, etc.)
+            modifier = Modifier.matchParentSize() // Match the size of the Box
+        )
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .background(Color.Black.copy(alpha = 0.3f)) // 30% opacity overlay
+        )
+        LazyColumn(
+            horizontalAlignment = Alignment.CenterHorizontally,
+//        verticalArrangement = Arrangement.Top,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
+//            .verticalScroll(scrollState)
+        ) {
+            item {
+                Header(
+                    header = header,
+                    modifier = Modifier
+                        .heightIn(min = 200.dp)
+                        .fillMaxWidth()
+                )
 
-        }
-        item {
-            Spacer(modifier = Modifier.size(4.dp))
-        }
-        item {
-            Ingredients(
-                ingredients = ingredients,
-                onCheckedChange = onIngredientsCheckedChange,
-                modifier = Modifier
-                    .fillMaxWidth()
+            }
+            item {
+                Spacer(modifier = Modifier.size(4.dp))
+            }
+            item {
+                Ingredients(
+                    ingredients = ingredients,
+                    onCheckedChange = onIngredientsCheckedChange,
+                    modifier = Modifier
+                        .fillMaxWidth()
 //                    .weight(1f)
-            )
-        }
-        item {
-            Spacer(modifier = Modifier.size(4.dp))
-        }
-        item {
-            Instructions(
-                instructions = instructions,
-                onCheckedChange = onInstructionsCheckedChange,
-                modifier = Modifier
-                    .fillMaxWidth()
+                )
+            }
+            item {
+                Spacer(modifier = Modifier.size(4.dp))
+            }
+            item {
+                Instructions(
+                    instructions = instructions,
+                    onCheckedChange = onInstructionsCheckedChange,
+                    modifier = Modifier
+                        .fillMaxWidth()
 //                    .weight(1f)
-            )
+                )
+            }
         }
     }
 }
@@ -381,50 +400,72 @@ fun RecipeCardLandscape(
     onInstructionsCheckedChange: (Int, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val header = Header(recipe.image, recipe.title, recipe.servings, recipe.prepTime, recipe.description)
+    val header =
+        Header(recipe.image, recipe.title, recipe.servings, recipe.prepTime, recipe.description)
 
-    Row {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier
-                .weight(1f)
-        ) {
-            Row(modifier = modifier
-                .padding(12.dp)) {
-                Header(
-                    header = header,
-                    modifier = modifier
-                )
-            }
-        }
-        Column(
-            modifier = modifier
-                .weight(1f)
-        ) {
-            Row(modifier = modifier
-                .weight(1f)
-                .padding(12.dp)
-            ){
-                Ingredients(
-                    ingredients,
-                    onCheckedChange = onIngredientsCheckedChange,
-                    modifier = modifier,
-                )
-            }
-        }
-        Column(
-            modifier = modifier
-                .weight(1f)
-        ) {
-            Row(modifier = modifier
-                .weight(1f)
-                .padding(12.dp)
+    Box(
+        modifier = Modifier
+            .fillMaxSize() // Fill the available space
+    ) {
+        // Background Image
+        Image(
+            painter = painterResource(id = R.drawable.background_image_01), // Replace with your image resource
+            contentDescription = null, // Decorative background image
+            contentScale = ContentScale.Crop, // Adjust as needed (Crop, Fit, FillBounds, etc.)
+            modifier = Modifier.matchParentSize() // Match the size of the Box
+        )
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .background(Color.Black.copy(alpha = 0.3f)) // 30% opacity overlay
+        )
+        Row {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = modifier
+                    .weight(1f)
             ) {
-                Instructions(
-                    instructions,
-                    onCheckedChange = onInstructionsCheckedChange,
+                Row(
                     modifier = modifier
-                )
+                        .padding(12.dp)
+                ) {
+                    Header(
+                        header = header,
+                        modifier = modifier
+                    )
+                }
+            }
+            Column(
+                modifier = modifier
+                    .weight(1f)
+            ) {
+                Row(
+                    modifier = modifier
+                        .weight(1f)
+                        .padding(12.dp)
+                ) {
+                    Ingredients(
+                        ingredients,
+                        onCheckedChange = onIngredientsCheckedChange,
+                        modifier = modifier,
+                    )
+                }
+            }
+            Column(
+                modifier = modifier
+                    .weight(1f)
+            ) {
+                Row(
+                    modifier = modifier
+                        .weight(1f)
+                        .padding(12.dp)
+                ) {
+                    Instructions(
+                        instructions,
+                        onCheckedChange = onInstructionsCheckedChange,
+                        modifier = modifier
+                    )
+                }
             }
         }
     }

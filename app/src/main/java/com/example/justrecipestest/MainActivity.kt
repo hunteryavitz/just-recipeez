@@ -114,7 +114,6 @@ class MainActivity : ComponentActivity() {
 //                }
                 Scaffold(
                     modifier = Modifier.fillMaxSize()
-                        .padding(32.dp),
 //                    floatingActionButton = {
 //                        FloatingActionButton(onClick = {
 //                            addItemToList(names)
