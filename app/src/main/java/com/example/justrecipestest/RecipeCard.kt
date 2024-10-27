@@ -40,6 +40,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 
 data class Header(
     val image: Int,
@@ -344,7 +347,7 @@ fun RecipeCardPortrait(
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .background(Color.Black.copy(alpha = 0.3f)) // 30% opacity overlay
+                .background(Color.White.copy(alpha = 0.5f)) // 30% opacity overlay
         )
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -417,7 +420,7 @@ fun RecipeCardLandscape(
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .background(Color.Black.copy(alpha = 0.3f)) // 30% opacity overlay
+                .background(Color.White.copy(alpha = 0.5f)) // 30% opacity overlay
         )
         Row {
             Column(

@@ -18,6 +18,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+
 
 @Composable
 fun InstructionStateful(
@@ -42,6 +46,13 @@ fun InstructionStateless(
     instructionText: String,
     onCheckedChange: (Boolean) -> Unit
 ) {
+    val fontFamilyUpdock = FontFamily(
+        Font(R.font.updock_regular, FontWeight.Normal),
+    )
+    val fontFamilyDancingScript = FontFamily(
+        Font(R.font.dancing_script, FontWeight.Bold),
+    )
+
     Row(
         horizontalArrangement = Arrangement.Start,
         modifier = Modifier
@@ -65,7 +76,8 @@ fun InstructionStateless(
         ) {
             Text(
                 text = instructionText,
-                fontSize = 16.sp
+                fontSize = 22.sp,
+                fontFamily = fontFamilyDancingScript,
             )
         }
     }

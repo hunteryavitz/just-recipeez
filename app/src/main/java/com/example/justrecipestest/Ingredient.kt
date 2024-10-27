@@ -17,6 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+
 
 @Composable
 fun IngredientStateful(
@@ -41,6 +45,11 @@ fun IngredientStateless(
     ingredientText: String,
     onCheckedChange: (Boolean) -> Unit
 ) {
+
+    val fontFamilyDancingScript = FontFamily(
+        Font(R.font.dancing_script, FontWeight.Bold),
+    )
+
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
@@ -66,7 +75,8 @@ fun IngredientStateless(
         ) {
             Text(
                 text = ingredientText,
-                fontSize = 16.sp
+                fontSize = 16.sp,
+                fontFamily = fontFamilyDancingScript
             )
         }
     }
