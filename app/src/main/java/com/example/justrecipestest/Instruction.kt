@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,7 +22,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-
 
 @Composable
 fun InstructionStateful(
@@ -46,9 +46,6 @@ fun InstructionStateless(
     instructionText: String,
     onCheckedChange: (Boolean) -> Unit
 ) {
-    val fontFamilyUpdock = FontFamily(
-        Font(R.font.updock_regular, FontWeight.Normal),
-    )
     val fontFamilyDancingScript = FontFamily(
         Font(R.font.dancing_script, FontWeight.Bold),
     )
@@ -65,7 +62,12 @@ fun InstructionStateless(
         ) {
             Checkbox(
                 checked = checked,
-                onCheckedChange = onCheckedChange
+                onCheckedChange = onCheckedChange,
+                colors = CheckboxDefaults.colors(
+                    checkmarkColor = Color.Black,
+                    checkedColor = Color.Black,
+                    uncheckedColor = Color.Black
+                )
             )
         }
         Column(
@@ -76,6 +78,7 @@ fun InstructionStateless(
         ) {
             Text(
                 text = instructionText,
+                color = Color.Black,
                 fontSize = 22.sp,
                 fontFamily = fontFamilyDancingScript,
             )

@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 
 data class Header(
     val image: Int,
@@ -50,6 +51,10 @@ data class Header(
     val servings: Int,
     val prepTime: Int,
     val description: String
+)
+
+val fontFamilyDancingScript = FontFamily(
+    Font(R.font.dancing_script, FontWeight.Bold),
 )
 
 @Composable
@@ -61,7 +66,7 @@ private fun ImageHeader(image: Int) {
             contentDescription = "Header",
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .size(128.dp)
+                .size(96.dp)
                 .clip(RoundedCornerShape(14.dp))
         )
     }
@@ -73,7 +78,10 @@ private fun Title(title: String) {
         .padding(8.dp)) {
         Text(
             text = title,
-            fontSize = 22.sp
+            color = Color.Black,
+            textAlign = TextAlign.Center,
+            fontSize = 28.sp,
+            fontFamily = fontFamilyDancingScript
         )
     }
 }
@@ -81,16 +89,22 @@ private fun Title(title: String) {
 @Composable
 private fun ServingsInfoSubtitle(servings: Int) {
     Text(
-        text = "SERVES $servings",
-        fontSize = 14.sp
+        text = "Serves $servings",
+        color = Color.Black,
+        textAlign = TextAlign.Center,
+        fontSize = 18.sp,
+        fontFamily = fontFamilyDancingScript
     )
 }
 
 @Composable
 private fun CookTimeInfoSubtitle(prepTime: Int) {
     Text(
-        text = "$prepTime MIN",
-        fontSize = 14.sp
+        text = "$prepTime Minutes",
+        color = Color.Black,
+        textAlign = TextAlign.Center,
+        fontSize = 18.sp,
+        fontFamily = fontFamilyDancingScript
     )
 }
 
@@ -111,7 +125,11 @@ private fun Subtitle(servings: Int, prepTime: Int) {
         Column(modifier = Modifier
             .padding(4.dp)
         ) {
-            Text(text = " | ", fontSize = 24.sp)
+            Text(
+                text = " | ",
+                color = Color.Black,
+                fontSize = 24.sp
+            )
         }
         Column(modifier = Modifier
             .padding(4.dp)
@@ -132,19 +150,19 @@ private fun Description(description: String) {
     ) {
         Text(
             text = description,
-            fontSize = 14.sp
+            color = Color.Black,
+            textAlign = TextAlign.Center,
+            fontSize = 16.sp,
+            fontFamily = fontFamilyDancingScript
         )
     }
 }
 
 @Composable
 private fun Header(header: Header, modifier: Modifier = Modifier) {
-    val (isExpanded, setIsExpanded) = remember { mutableStateOf(true) }
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f), RoundedCornerShape(8.dp))
     ) {
         Title(header.title)
         ImageHeader(header.image)
@@ -167,7 +185,9 @@ private fun IngredientsHeader(
     ) {
         Text(
             text = "Ingredients",
-            fontSize = 20.sp
+            color = Color.Black,
+            fontSize = 24.sp,
+            fontFamily = fontFamilyDancingScript
         )
     }
 }
@@ -183,7 +203,7 @@ private fun Ingredients(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f), RoundedCornerShape(8.dp))
+            .border(3.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
     ) {
         IngredientsHeader(
             onHeaderClicked = { setIsExpanded(!isExpanded) },
@@ -217,7 +237,9 @@ private fun InstructionsHeader(
     ) {
         Text(
             text = "Instructions",
-            fontSize = 20.sp
+            color = Color.Black,
+            fontSize = 24.sp,
+            fontFamily = fontFamilyDancingScript
         )
     }
 }
@@ -233,7 +255,7 @@ private fun Instructions(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f), RoundedCornerShape(8.dp))
+            .border(3.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
     ) {
         InstructionsHeader(
             onHeaderClicked = { setIsExpanded(!isExpanded) },
@@ -323,8 +345,6 @@ fun RecipeCardPortrait(
     instructions: List<Instruction>,
     onInstructionsCheckedChange: (Int, Boolean) -> Unit
 ) {
-//    val scrollState = rememberScrollState()
-
     val header = Header(
         recipe.image,
         recipe.title,
@@ -335,60 +355,59 @@ fun RecipeCardPortrait(
 
     Box(
         modifier = Modifier
-            .fillMaxSize() // Fill the available space
+            .fillMaxSize()
     ) {
-        // Background Image
         Image(
-            painter = painterResource(id = R.drawable.background_image_01), // Replace with your image resource
-            contentDescription = null, // Decorative background image
-            contentScale = ContentScale.Crop, // Adjust as needed (Crop, Fit, FillBounds, etc.)
-            modifier = Modifier.matchParentSize() // Match the size of the Box
+            painter = painterResource(id = R.drawable.background_image_01),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.matchParentSize()
         )
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .background(Color.White.copy(alpha = 0.5f)) // 30% opacity overlay
+                .background(Color.White.copy(alpha = 0.7f))
         )
-        LazyColumn(
-            horizontalAlignment = Alignment.CenterHorizontally,
-//        verticalArrangement = Arrangement.Top,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp)
-//            .verticalScroll(scrollState)
+        Column(
+            modifier = Modifier.padding(top = 24.dp)
         ) {
-            item {
-                Header(
-                    header = header,
-                    modifier = Modifier
-                        .heightIn(min = 200.dp)
-                        .fillMaxWidth()
-                )
+            LazyColumn(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(24.dp)
+            ) {
+                item {
+                    Header(
+                        header = header,
+                        modifier = Modifier
+                            .heightIn(min = 200.dp)
+                            .fillMaxWidth()
+                    )
 
-            }
-            item {
-                Spacer(modifier = Modifier.size(4.dp))
-            }
-            item {
-                Ingredients(
-                    ingredients = ingredients,
-                    onCheckedChange = onIngredientsCheckedChange,
-                    modifier = Modifier
-                        .fillMaxWidth()
-//                    .weight(1f)
-                )
-            }
-            item {
-                Spacer(modifier = Modifier.size(4.dp))
-            }
-            item {
-                Instructions(
-                    instructions = instructions,
-                    onCheckedChange = onInstructionsCheckedChange,
-                    modifier = Modifier
-                        .fillMaxWidth()
-//                    .weight(1f)
-                )
+                }
+                item {
+                    Spacer(modifier = Modifier.size(4.dp))
+                }
+                item {
+                    Ingredients(
+                        ingredients = ingredients,
+                        onCheckedChange = onIngredientsCheckedChange,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                }
+                item {
+                    Spacer(modifier = Modifier.size(4.dp))
+                }
+                item {
+                    Instructions(
+                        instructions = instructions,
+                        onCheckedChange = onInstructionsCheckedChange,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                }
             }
         }
     }
@@ -408,29 +427,32 @@ fun RecipeCardLandscape(
 
     Box(
         modifier = Modifier
-            .fillMaxSize() // Fill the available space
+            .fillMaxSize()
     ) {
-        // Background Image
         Image(
-            painter = painterResource(id = R.drawable.background_image_01), // Replace with your image resource
-            contentDescription = null, // Decorative background image
-            contentScale = ContentScale.Crop, // Adjust as needed (Crop, Fit, FillBounds, etc.)
-            modifier = Modifier.matchParentSize() // Match the size of the Box
+            painter = painterResource(id = R.drawable.background_image_01),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.matchParentSize()
         )
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .background(Color.White.copy(alpha = 0.5f)) // 30% opacity overlay
+                .background(Color.White.copy(alpha = 0.7f))
         )
-        Row {
+        Row(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(top = 24.dp, start = 24.dp)
+        ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = modifier
-                    .weight(1f)
+                    .weight(.5f)
             ) {
                 Row(
                     modifier = modifier
-                        .padding(12.dp)
+                        .padding(4.dp)
                 ) {
                     Header(
                         header = header,
@@ -486,8 +508,8 @@ fun RecipeCardPreviewLandscape() {
     RecipeCard(PaddingValues(0.dp), recipe)
 }
 
-//@Preview(showBackground = true, name = "Recipe Card Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
-//@Composable
-//fun RecipeCardPreviewDark() {
-//    RecipeCard(PaddingValues(0.dp), recipe)
-//}
+@Preview(showBackground = true, name = "Recipe Card Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun RecipeCardPreviewDark() {
+    RecipeCard(PaddingValues(0.dp), recipe)
+}
