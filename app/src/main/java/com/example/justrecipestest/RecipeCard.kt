@@ -371,44 +371,30 @@ fun RecipeCardPortrait(
         Column(
             modifier = Modifier.padding(top = 24.dp)
         ) {
-            LazyColumn(
-                horizontalAlignment = Alignment.CenterHorizontally,
+            Header(
+                header = header,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(24.dp)
-            ) {
-                item {
-                    Header(
-                        header = header,
-                        modifier = Modifier
-                            .heightIn(min = 200.dp)
-                            .fillMaxWidth()
-                    )
+                    .heightIn(min = 200.dp)
+                    .fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.size(4.dp))
 
-                }
-                item {
-                    Spacer(modifier = Modifier.size(4.dp))
-                }
-                item {
-                    Ingredients(
-                        ingredients = ingredients,
-                        onCheckedChange = onIngredientsCheckedChange,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    )
-                }
-                item {
-                    Spacer(modifier = Modifier.size(4.dp))
-                }
-                item {
-                    Instructions(
-                        instructions = instructions,
-                        onCheckedChange = onInstructionsCheckedChange,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    )
-                }
-            }
+            Ingredients(
+                ingredients = ingredients,
+                onCheckedChange = onIngredientsCheckedChange,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.5f)
+            )
+            Spacer(modifier = Modifier.size(4.dp))
+
+            Instructions(
+                instructions = instructions,
+                onCheckedChange = onInstructionsCheckedChange,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(0.5f)
+            )
         }
     }
 }
