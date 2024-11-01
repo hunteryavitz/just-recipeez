@@ -22,6 +22,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -179,16 +187,43 @@ private fun IngredientsHeader(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .clickable(onClick = onHeaderClicked)
             .padding(12.dp)
             .fillMaxWidth()
     ) {
-        Text(
-            text = "Ingredients",
-            color = Color.Black,
-            fontSize = 24.sp,
-            fontFamily = fontFamilyDancingScript
-        )
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            IconButton(
+                onClick = { }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowDown,
+                    contentDescription = "Expand Card",
+                    tint = Color.Black,
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clickable(onClick = onHeaderClicked)
+                )
+            }
+            Text(
+                text = "Ingredients",
+                color = Color.Black,
+                fontSize = 24.sp,
+                fontFamily = fontFamilyDancingScript
+            )
+            IconButton(
+                onClick = { }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowUp,
+                    contentDescription = "Expand Card",
+                    tint = Color.Black,
+                    modifier = Modifier.size(32.dp)
+                )
+            }
+        }
     }
 }
 
@@ -196,9 +231,9 @@ private fun IngredientsHeader(
 private fun Ingredients(
     ingredients: List<Ingredient>,
     onCheckedChange: (Int, Boolean) -> Unit,
+    onHeaderClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val (isExpanded, setIsExpanded) = remember { mutableStateOf(true) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -206,20 +241,14 @@ private fun Ingredients(
             .border(3.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
     ) {
         IngredientsHeader(
-            onHeaderClicked = { setIsExpanded(!isExpanded) },
+            onHeaderClicked = onHeaderClicked,
             modifier = Modifier
         )
-        AnimatedVisibility(
-            visible = isExpanded,
-            enter = expandVertically(animationSpec = spring()),
-            exit = shrinkVertically(animationSpec = spring())
-        ) {
-            IngredientListStateless(
-                ingredients = ingredients,
-                onCheckedChange = onCheckedChange,
-                modifier = Modifier.padding(vertical = 4.dp)
-            )
-        }
+        IngredientListStateless(
+            ingredients = ingredients,
+            onCheckedChange = onCheckedChange,
+            modifier = Modifier.padding(vertical = 4.dp)
+        )
     }
 }
 
@@ -258,8 +287,7 @@ private fun Instructions(
             .border(3.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
     ) {
         InstructionsHeader(
-            onHeaderClicked = { setIsExpanded(!isExpanded) },
-            modifier = Modifier
+            onHeaderClicked = { setIsExpanded(!isExpanded) }
         )
         AnimatedVisibility(
             visible = isExpanded,
@@ -382,9 +410,10 @@ fun RecipeCardPortrait(
             Ingredients(
                 ingredients = ingredients,
                 onCheckedChange = onIngredientsCheckedChange,
+                onHeaderClicked = { setIsExpanded(!isExpanded) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(0.5f)
+                    .weight(if (isExpanded) 0.5f else 0.2f)
             )
             Spacer(modifier = Modifier.size(4.dp))
 
@@ -458,7 +487,8 @@ fun RecipeCardLandscape(
                     Ingredients(
                         ingredients,
                         onCheckedChange = onIngredientsCheckedChange,
-                        modifier = modifier,
+                        onHeaderClicked = { },
+                        modifier = modifier
                     )
                 }
             }
