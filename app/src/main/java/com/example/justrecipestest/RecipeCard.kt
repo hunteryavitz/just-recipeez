@@ -124,15 +124,12 @@ private fun Subtitle(servings: Int, prepTime: Int) {
             .padding(4.dp)
     ) {
         Column(modifier = Modifier
-            .padding(4.dp)
             .weight(1f),
             horizontalAlignment = Alignment.End
         ) {
             ServingsInfoSubtitle(servings)
         }
-        Column(modifier = Modifier
-            .padding(4.dp)
-        ) {
+        Column(modifier = Modifier) {
             Text(
                 text = " | ",
                 color = Color.Black,
@@ -140,7 +137,6 @@ private fun Subtitle(servings: Int, prepTime: Int) {
             )
         }
         Column(modifier = Modifier
-            .padding(4.dp)
             .weight(1f),
             horizontalAlignment = Alignment.Start
         ) {
@@ -187,7 +183,7 @@ private fun IngredientsHeader(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .padding(12.dp)
+            .padding(8.dp)
             .fillMaxWidth()
     ) {
         Row(
@@ -381,6 +377,7 @@ fun RecipeCardPortrait(
         recipe.description
     )
 
+    val (isExpandedIngredients, setIsExpandedIngredients) = remember { mutableStateOf(false) }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -410,10 +407,10 @@ fun RecipeCardPortrait(
             Ingredients(
                 ingredients = ingredients,
                 onCheckedChange = onIngredientsCheckedChange,
-                onHeaderClicked = { setIsExpanded(!isExpanded) },
+                onHeaderClicked = { setIsExpandedIngredients(!isExpandedIngredients) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(if (isExpanded) 0.5f else 0.2f)
+                    .weight(if (isExpandedIngredients) 0.5f else 0.1f)
             )
             Spacer(modifier = Modifier.size(4.dp))
 

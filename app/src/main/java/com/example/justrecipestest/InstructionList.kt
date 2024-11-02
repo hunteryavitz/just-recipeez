@@ -39,7 +39,7 @@ fun InstructionListStateless(
 ) {
     LazyColumn(modifier = modifier
         .heightIn(max = 400.dp),
-        contentPadding = PaddingValues(vertical = 16.dp),
+        contentPadding = PaddingValues(vertical = 8.dp),
         content = {
             itemsIndexed(instructions) { index, instruction ->
                 InstructionStateless(

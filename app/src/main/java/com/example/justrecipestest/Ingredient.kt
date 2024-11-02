@@ -44,7 +44,8 @@ fun IngredientStateful(
 fun IngredientStateless(
     checked: Boolean,
     ingredientText: String,
-    onCheckedChange: (Boolean) -> Unit
+    onCheckedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ) {
 
     val fontFamilyDancingScript = FontFamily(
@@ -54,7 +55,7 @@ fun IngredientStateless(
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
     ) {
         Column(
@@ -77,7 +78,7 @@ fun IngredientStateless(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .weight(2f)
-                .padding(12.dp)
+                .padding(8.dp)
         ) {
             Text(
                 text = ingredientText,

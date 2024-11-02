@@ -37,8 +37,9 @@ fun IngredientListStateless(
     onCheckedChange: (Int, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(modifier = Modifier.heightIn(max = 400.dp),
-        contentPadding = PaddingValues(vertical = 16.dp),
+    LazyColumn(modifier = modifier
+        .heightIn(max = 400.dp),
+        contentPadding = PaddingValues(vertical = 8.dp),
         content = {
             itemsIndexed(ingredients) { index, ingredient ->
                 IngredientStateless(

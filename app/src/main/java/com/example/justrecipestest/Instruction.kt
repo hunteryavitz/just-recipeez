@@ -44,7 +44,8 @@ fun InstructionStateful(
 fun InstructionStateless(
     checked: Boolean,
     instructionText: String,
-    onCheckedChange: (Boolean) -> Unit
+    onCheckedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val fontFamilyDancingScript = FontFamily(
         Font(R.font.dancing_script, FontWeight.Bold),
@@ -52,7 +53,7 @@ fun InstructionStateless(
 
     Row(
         horizontalArrangement = Arrangement.Start,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
     ) {
         Column(
@@ -74,7 +75,7 @@ fun InstructionStateless(
             horizontalAlignment = Alignment.Start,
             modifier = Modifier
                 .weight(4f)
-                .padding(12.dp)
+                .padding(8.dp)
         ) {
             Text(
                 text = instructionText,
