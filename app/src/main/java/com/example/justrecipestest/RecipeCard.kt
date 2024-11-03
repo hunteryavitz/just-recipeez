@@ -1,6 +1,7 @@
 package com.example.justrecipestest
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandVertically
@@ -177,8 +178,9 @@ private fun Header(header: Header, modifier: Modifier = Modifier) {
 
 @Composable
 private fun IngredientsHeader(
-    modifier: Modifier = Modifier,
-    onHeaderClicked: () -> Unit
+    onExpandIngredientsClicked: () -> Unit,
+    onFullScreenIngredientsClicked: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -200,7 +202,7 @@ private fun IngredientsHeader(
                     tint = Color.Black,
                     modifier = Modifier
                         .size(32.dp)
-                        .clickable(onClick = onHeaderClicked)
+                        .clickable(onClick = onExpandIngredientsClicked)
                 )
             }
             Text(
@@ -216,7 +218,9 @@ private fun IngredientsHeader(
                     imageVector = Icons.Default.KeyboardArrowUp,
                     contentDescription = "Expand Card",
                     tint = Color.Black,
-                    modifier = Modifier.size(32.dp)
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clickable(onClick = onFullScreenIngredientsClicked)
                 )
             }
         }
@@ -227,7 +231,8 @@ private fun IngredientsHeader(
 private fun Ingredients(
     ingredients: List<Ingredient>,
     onCheckedChange: (Int, Boolean) -> Unit,
-    onHeaderClicked: () -> Unit,
+    onExpandIngredientsClicked: () -> Unit,
+    onFullScreenIngredientsClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -237,7 +242,8 @@ private fun Ingredients(
             .border(3.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
     ) {
         IngredientsHeader(
-            onHeaderClicked = onHeaderClicked,
+            onExpandIngredientsClicked = onExpandIngredientsClicked,
+            onFullScreenIngredientsClicked = onFullScreenIngredientsClicked,
             modifier = Modifier
         )
         IngredientListStateless(
@@ -250,22 +256,52 @@ private fun Ingredients(
 
 @Composable
 private fun InstructionsHeader(
-    modifier: Modifier = Modifier,
-    onHeaderClicked: () -> Unit
+    onExpandInstructionsClicked: () -> Unit,
+    onFullScreenInstructionsClicked: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .clickable(onClick = onHeaderClicked)
             .padding(12.dp)
             .fillMaxWidth()
     ) {
-        Text(
-            text = "Instructions",
-            color = Color.Black,
-            fontSize = 24.sp,
-            fontFamily = fontFamilyDancingScript
-        )
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            IconButton(
+                onClick = { }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowDown,
+                    contentDescription = "Expand Card",
+                    tint = Color.Black,
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clickable(onClick = onExpandInstructionsClicked)
+                )
+            }
+            Text(
+                text = "Instructions",
+                color = Color.Black,
+                fontSize = 24.sp,
+                fontFamily = fontFamilyDancingScript
+            )
+            IconButton(
+                onClick = { }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowUp,
+                    contentDescription = "Expand Card",
+                    tint = Color.Black,
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clickable(onClick = onFullScreenInstructionsClicked)
+                )
+            }
+        }
     }
 }
 
@@ -273,9 +309,10 @@ private fun InstructionsHeader(
 private fun Instructions(
     instructions: List<Instruction>,
     onCheckedChange: (Int, Boolean) -> Unit,
+    onExpandInstructionsClicked: () -> Unit,
+    onFullScreenInstructionsClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val (isExpanded, setIsExpanded) = remember { mutableStateOf(true) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -283,19 +320,20 @@ private fun Instructions(
             .border(3.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
     ) {
         InstructionsHeader(
-            onHeaderClicked = { setIsExpanded(!isExpanded) }
+            onExpandInstructionsClicked = onExpandInstructionsClicked,
+            onFullScreenInstructionsClicked = onFullScreenInstructionsClicked
         )
-        AnimatedVisibility(
-            visible = isExpanded,
-            enter = expandVertically(animationSpec = spring()),
-            exit = shrinkVertically(animationSpec = spring())
-        ) {
-            InstructionListStateless(
-                instructions = instructions,
-                onCheckedChange = onCheckedChange,
-                modifier = Modifier.padding(vertical = 4.dp)
-            )
-        }
+        InstructionListStateless(
+            instructions = instructions,
+            onCheckedChange = onCheckedChange,
+            modifier = Modifier.padding(vertical = 4.dp)
+        )
+//        AnimatedVisibility(
+//            visible = isExpanded,
+//            enter = expandVertically(animationSpec = spring()),
+//            exit = shrinkVertically(animationSpec = spring())
+//        ) {
+//        }
     }
 }
 
@@ -378,6 +416,10 @@ fun RecipeCardPortrait(
     )
 
     val (isExpandedIngredients, setIsExpandedIngredients) = remember { mutableStateOf(false) }
+    val (isFullScreenIngredients, setIsFullScreenIngredients) = remember { mutableStateOf(false) }
+    val (isExpandedInstructions, setIsExpandedInstructions) = remember { mutableStateOf(false) }
+    val (isFullScreenInstructions, setIsFullScreenInstructions) = remember { mutableStateOf(false) }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -399,27 +441,32 @@ fun RecipeCardPortrait(
             Header(
                 header = header,
                 modifier = Modifier
-                    .heightIn(min = 200.dp)
+                    .heightIn(min = 50.dp)
                     .fillMaxWidth()
             )
+
             Spacer(modifier = Modifier.size(4.dp))
 
             Ingredients(
                 ingredients = ingredients,
                 onCheckedChange = onIngredientsCheckedChange,
-                onHeaderClicked = { setIsExpandedIngredients(!isExpandedIngredients) },
+                onExpandIngredientsClicked = { setIsExpandedIngredients(!isExpandedIngredients) },
+                onFullScreenIngredientsClicked = { setIsFullScreenIngredients(!isFullScreenIngredients) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(if (isExpandedIngredients) 0.5f else 0.1f)
             )
+
             Spacer(modifier = Modifier.size(4.dp))
 
             Instructions(
                 instructions = instructions,
                 onCheckedChange = onInstructionsCheckedChange,
+                onExpandInstructionsClicked = { setIsExpandedInstructions(!isExpandedInstructions) },
+                onFullScreenInstructionsClicked = { setIsFullScreenInstructions(!isFullScreenInstructions) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(0.5f)
+                    .weight(if (isExpandedInstructions) 0.5f else 0.1f)
             )
         }
     }
@@ -484,7 +531,8 @@ fun RecipeCardLandscape(
                     Ingredients(
                         ingredients,
                         onCheckedChange = onIngredientsCheckedChange,
-                        onHeaderClicked = { },
+                        onExpandIngredientsClicked = { },
+                        onFullScreenIngredientsClicked = { },
                         modifier = modifier
                     )
                 }
@@ -501,6 +549,8 @@ fun RecipeCardLandscape(
                     Instructions(
                         instructions,
                         onCheckedChange = onInstructionsCheckedChange,
+                        onExpandInstructionsClicked = { },
+                        onFullScreenInstructionsClicked = { },
                         modifier = modifier
                     )
                 }
