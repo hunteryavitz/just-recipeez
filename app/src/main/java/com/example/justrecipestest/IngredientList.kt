@@ -34,11 +34,9 @@ fun IngredientListStateful(ingredients: List<Ingredient>) {
 @Composable
 fun IngredientListStateless(
     ingredients: List<Ingredient>,
-    onCheckedChange: (Int, Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    onCheckedChange: (Int, Boolean) -> Unit
 ) {
-    LazyColumn(modifier = modifier
-        .heightIn(max = 400.dp),
+    LazyColumn(
         contentPadding = PaddingValues(vertical = 8.dp),
         content = {
             itemsIndexed(ingredients) { index, ingredient ->

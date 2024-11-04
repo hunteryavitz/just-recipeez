@@ -34,11 +34,9 @@ fun InstructionListStateful(instructions: List<Instruction>) {
 @Composable
 fun InstructionListStateless(
     instructions: List<Instruction>,
-    onCheckedChange: (Int, Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    onCheckedChange: (Int, Boolean) -> Unit
 ) {
-    LazyColumn(modifier = modifier
-        .heightIn(max = 400.dp),
+    LazyColumn(
         contentPadding = PaddingValues(vertical = 8.dp),
         content = {
             itemsIndexed(instructions) { index, instruction ->
