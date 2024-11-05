@@ -1,11 +1,6 @@
 package com.example.justrecipestest
 
 import android.content.res.Configuration
-import android.util.Log
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -21,14 +16,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -46,13 +37,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 data class Header(
     val image: Int,
@@ -164,15 +155,38 @@ private fun Description(description: String) {
 }
 
 @Composable
-private fun Header(header: Header, modifier: Modifier = Modifier) {
+private fun Header(
+    header: Header,
+    modifier: Modifier = Modifier) {
+    val (isExpanded, setIsExpanded) = remember { mutableStateOf(false) }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
-        Title(header.title)
-        ImageHeader(header.image)
-        Subtitle(header.servings, header.prepTime)
-        Description(header.description)
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Title(header.title)
+            IconButton(
+                onClick = { }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowUp,
+                    contentDescription = "Expand Card",
+                    tint = Color.Black,
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clickable(onClick = { setIsExpanded(!isExpanded) })
+                )
+            }
+        }
+        if (isExpanded) {
+            ImageHeader(header.image)
+            Subtitle(header.servings, header.prepTime)
+            Description(header.description)
+        }
     }
 }
 
@@ -202,7 +216,7 @@ private fun IngredientsHeader(
                 onClick = { }
             ) {
                 Icon(
-                    imageVector = Icons.Default.KeyboardArrowUp,
+                    imageVector = Icons.Default.KeyboardArrowDown,
                     contentDescription = "Expand Card",
                     tint = Color.Black,
                     modifier = Modifier
@@ -261,7 +275,7 @@ private fun InstructionsHeader(
                 onClick = { }
             ) {
                 Icon(
-                    imageVector = Icons.Default.KeyboardArrowUp,
+                    imageVector = Icons.Default.KeyboardArrowDown,
                     contentDescription = "Expand Card",
                     tint = Color.Black,
                     modifier = Modifier
@@ -404,9 +418,7 @@ fun RecipeCardPortrait(
                     header = header,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(min = 100.dp)
                 )
-
                 Ingredients(
                     ingredients = ingredients,
                     onCheckedChange = onIngredientsCheckedChange,
