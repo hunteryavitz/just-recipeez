@@ -1,6 +1,10 @@
 package com.example.justrecipestest
 
 import android.content.res.Configuration
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,11 +17,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Icon
@@ -75,13 +79,17 @@ private fun ImageHeader(image: Int) {
 @Composable
 private fun Title(title: String) {
     Row(modifier = Modifier
-        .padding(8.dp)) {
+        .padding(8.dp)
+        .fillMaxWidth()
+    ) {
         Text(
             text = title,
             color = Color.Black,
             textAlign = TextAlign.Center,
             fontSize = 28.sp,
-            fontFamily = fontFamilyDancingScript
+            fontFamily = fontFamilyDancingScript,
+            modifier = Modifier
+                .fillMaxWidth()
         )
     }
 }
@@ -157,18 +165,16 @@ private fun Description(description: String) {
 @Composable
 private fun Header(
     header: Header,
-    modifier: Modifier = Modifier) {
-    val (isExpanded, setIsExpanded) = remember { mutableStateOf(false) }
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
+    modifier: Modifier
+) {
+    val (isExpanded, setIsExpanded) = remember { mutableStateOf(true) }
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
+            .fillMaxWidth()
     ) {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Title(header.title)
+        Column {
             IconButton(
                 onClick = { }
             ) {
@@ -182,7 +188,37 @@ private fun Header(
                 )
             }
         }
-        if (isExpanded) {
+        Column(
+            modifier = modifier
+                .weight(1f)
+        ) {
+            Title(header.title)
+        }
+        Column {
+            IconButton(
+                onClick = { }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Favorite,
+                    contentDescription = "Expand Card",
+                    tint = Color.Black,
+                    modifier = Modifier
+                        .size(22.dp)
+                        .clickable(onClick = { setIsExpanded(!isExpanded) })
+                )
+            }
+        }
+    }
+    AnimatedVisibility(
+        visible = isExpanded,
+        enter = expandVertically(animationSpec = spring()),
+        exit = shrinkVertically(animationSpec = spring())
+    ) {
+        Column(
+            modifier = modifier
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             ImageHeader(header.image)
             Subtitle(header.servings, header.prepTime)
             Description(header.description)
@@ -192,6 +228,7 @@ private fun Header(
 
 @Composable
 private fun IngredientsHeader(
+    onCollapseIngredientsListClicked: () -> Unit,
     onFullScreenIngredientsClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -206,23 +243,42 @@ private fun IngredientsHeader(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(
-                text = "Ingredients",
-                color = Color.Black,
-                fontSize = 24.sp,
-                fontFamily = fontFamilyDancingScript
-            )
-            IconButton(
-                onClick = { }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.KeyboardArrowDown,
-                    contentDescription = "Expand Card",
-                    tint = Color.Black,
-                    modifier = Modifier
-                        .size(32.dp)
-                        .clickable(onClick = onFullScreenIngredientsClicked)
+            Column {
+                IconButton(
+                    onClick = { }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowUp,
+                        contentDescription = "Expand Card",
+                        tint = Color.Black,
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clickable(onClick = onCollapseIngredientsListClicked)
+                    )
+                }
+            }
+            Column {
+                Text(
+                    text = "Ingredients",
+                    color = Color.Black,
+                    fontSize = 24.sp,
+                    fontFamily = fontFamilyDancingScript,
+                    textAlign = TextAlign.Center
                 )
+            }
+            Column {
+                IconButton(
+                    onClick = { }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowDown,
+                        contentDescription = "Expand Card",
+                        tint = Color.Black,
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clickable(onClick = onFullScreenIngredientsClicked)
+                    )
+                }
             }
         }
     }
@@ -232,16 +288,21 @@ private fun IngredientsHeader(
 private fun Ingredients(
     ingredients: List<Ingredient>,
     onCheckedChange: (Int, Boolean) -> Unit,
+    onCollapseIngredientsListClicked: () -> Unit,
     onFullScreenIngredientsClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+//    val (isExpanded, setIsExpanded) = remember { mutableStateOf(true) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .border(3.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
     ) {
-        IngredientsHeader(onFullScreenIngredientsClicked = onFullScreenIngredientsClicked,)
+        IngredientsHeader(
+            onCollapseIngredientsListClicked = { onCollapseIngredientsListClicked() },
+            onFullScreenIngredientsClicked = onFullScreenIngredientsClicked
+        )
         IngredientListStateless(
             ingredients = ingredients,
             onCheckedChange = onCheckedChange
@@ -251,6 +312,7 @@ private fun Ingredients(
 
 @Composable
 private fun InstructionsHeader(
+    onCollapseInstructionsHeaderClicked: () -> Unit,
     onFullScreenInstructionsClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -265,23 +327,41 @@ private fun InstructionsHeader(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(
-                text = "Instructions",
-                color = Color.Black,
-                fontSize = 24.sp,
-                fontFamily = fontFamilyDancingScript
-            )
-            IconButton(
-                onClick = { }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.KeyboardArrowDown,
-                    contentDescription = "Expand Card",
-                    tint = Color.Black,
-                    modifier = Modifier
-                        .size(32.dp)
-                        .clickable(onClick = onFullScreenInstructionsClicked)
+            Column {
+                IconButton(
+                    onClick = { }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowUp,
+                        contentDescription = "Expand Card",
+                        tint = Color.Black,
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clickable(onClick = onCollapseInstructionsHeaderClicked)
+                    )
+                }
+            }
+            Column {
+                Text(
+                    text = "Instructions",
+                    color = Color.Black,
+                    fontSize = 24.sp,
+                    fontFamily = fontFamilyDancingScript
                 )
+            }
+            Column {
+                IconButton(
+                    onClick = { }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowDown,
+                        contentDescription = "Expand Card",
+                        tint = Color.Black,
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clickable(onClick = onFullScreenInstructionsClicked)
+                    )
+                }
             }
         }
     }
@@ -291,16 +371,21 @@ private fun InstructionsHeader(
 private fun Instructions(
     instructions: List<Instruction>,
     onCheckedChange: (Int, Boolean) -> Unit,
+    onCollapseInstructionsHeaderClicked: () -> Unit,
     onFullScreenInstructionsClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+//    val (isExpanded, setIsExpanded) = remember { mutableStateOf(true) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .border(3.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
     ) {
-        InstructionsHeader(onFullScreenInstructionsClicked = onFullScreenInstructionsClicked)
+        InstructionsHeader(
+            onCollapseInstructionsHeaderClicked = { onCollapseInstructionsHeaderClicked() },
+            onFullScreenInstructionsClicked = onFullScreenInstructionsClicked
+        )
         InstructionListStateless(
             instructions = instructions,
             onCheckedChange = onCheckedChange
@@ -392,7 +477,9 @@ fun RecipeCardPortrait(
         recipe.description
     )
 
+    val (isCollapsedIngredientsList, setIsCollapsedIngredientsList) = remember { mutableStateOf(false) }
     val (isFullScreenIngredients, setIsFullScreenIngredients) = remember { mutableStateOf(false) }
+    val (isCollapsedInstructionsList, setIsCollapsedInstructionsList) = remember { mutableStateOf(false) }
     val (isFullScreenInstructions, setIsFullScreenInstructions) = remember { mutableStateOf(false) }
 
     Box(
@@ -419,30 +506,42 @@ fun RecipeCardPortrait(
                     modifier = Modifier
                         .fillMaxWidth()
                 )
-                Ingredients(
-                    ingredients = ingredients,
-                    onCheckedChange = onIngredientsCheckedChange,
-                    onFullScreenIngredientsClicked = { setIsFullScreenIngredients(true) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(0.3f)
-                )
-
+                if (isCollapsedIngredientsList) {
+                    IngredientsHeader(
+                        onCollapseIngredientsListClicked = { setIsCollapsedIngredientsList(false) },
+                        onFullScreenIngredientsClicked = { setIsFullScreenIngredients(true) }
+                    )
+                } else {
+                    Ingredients(
+                        ingredients = ingredients,
+                        onCheckedChange = onIngredientsCheckedChange,
+                        onCollapseIngredientsListClicked = { setIsCollapsedIngredientsList(true) },
+                        onFullScreenIngredientsClicked = { setIsFullScreenIngredients(true) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                }
                 Spacer(modifier = Modifier.size(4.dp))
-
-                Instructions(
-                    instructions = instructions,
-                    onCheckedChange = onInstructionsCheckedChange,
-                    onFullScreenInstructionsClicked = { setIsFullScreenInstructions(true) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(0.3f)
-                )
-
+                if (isCollapsedInstructionsList) {
+                    InstructionsHeader(
+                        onCollapseInstructionsHeaderClicked = { setIsCollapsedInstructionsList(false) },
+                        onFullScreenInstructionsClicked = { setIsFullScreenInstructions(true) }
+                    )
+                } else {
+                    Instructions(
+                        instructions = instructions,
+                        onCheckedChange = onInstructionsCheckedChange,
+                        onCollapseInstructionsHeaderClicked = { setIsCollapsedInstructionsList(true) },
+                        onFullScreenInstructionsClicked = { setIsFullScreenInstructions(true) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                }
             } else if (isFullScreenIngredients) {
                 Ingredients(
                     ingredients = ingredients,
                     onCheckedChange = onIngredientsCheckedChange,
+                    onCollapseIngredientsListClicked = { setIsCollapsedIngredientsList(false) },
                     onFullScreenIngredientsClicked = { setIsFullScreenIngredients(false) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -452,6 +551,7 @@ fun RecipeCardPortrait(
                 Instructions(
                     instructions = instructions,
                     onCheckedChange = onInstructionsCheckedChange,
+                    onCollapseInstructionsHeaderClicked = { setIsCollapsedInstructionsList(false) },
                     onFullScreenInstructionsClicked = { setIsFullScreenInstructions(false) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -521,9 +621,9 @@ fun RecipeCardLandscape(
                     Ingredients(
                         ingredients,
                         onCheckedChange = onIngredientsCheckedChange,
+                        onCollapseIngredientsListClicked = { },
                         onFullScreenIngredientsClicked = { },
-                        modifier = modifier
-                    )
+                        modifier = modifier)
                 }
             }
             Column(
@@ -538,6 +638,7 @@ fun RecipeCardLandscape(
                     Instructions(
                         instructions,
                         onCheckedChange = onInstructionsCheckedChange,
+                        onCollapseInstructionsHeaderClicked = { },
                         onFullScreenInstructionsClicked = { },
                         modifier = modifier
                     )
