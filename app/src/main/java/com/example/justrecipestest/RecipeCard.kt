@@ -6,89 +6,48 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-@Composable
-private fun ImageHeader(image: Int) {
-    Image(
-        painter = painterResource(image),
-        contentDescription = "Header",
-        contentScale = ContentScale.Crop,
-        modifier = Modifier
-            .size(196.dp)
-            .clip(RoundedCornerShape(10.dp))
-    )
-}
-
-@Composable
-private fun Title(title: String) {
-    Text(
-        text = title,
-        fontSize = 16.sp,
-        modifier = Modifier.padding(top = 8.dp)
-    )
-}
-
-@Composable
-private fun ServingsInfoSubtitle(servings: Int) {
-    Text(
-        text = "Serves: $servings",
-        fontSize = 12.sp,
-        modifier = Modifier.padding(4.dp)
-    )
-}
-
-@Composable
-private fun CookTimeInfoSubtitle(prepTime: Int) {
-    Text(
-        text = "Cook Time: $prepTime minutes",
-        fontSize = 12.sp,
-        modifier = Modifier.padding(4.dp)
-    )
-}
-
-@Composable
-private fun Subtitle(servings: Int, prepTime: Int) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        ServingsInfoSubtitle(servings)
-        Text(text = " | ", fontSize = 24.sp)
-        CookTimeInfoSubtitle(prepTime)
-    }
-}
-
-@Composable
-private fun Description(description: String) {
-    Text(
-        text = description,
-        fontSize = 14.sp,
-        modifier = Modifier.padding(8.dp)
-    )
-}
 
 data class Header(
     val image: Int,
@@ -98,84 +57,171 @@ data class Header(
     val description: String
 )
 
+val fontFamilyDancingScript = FontFamily(
+    Font(R.font.dancing_script, FontWeight.Bold),
+)
+
 @Composable
-private fun Header(header: Header) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        ImageHeader(header.image)
-        Title(header.title)
-        Subtitle(header.servings, header.prepTime)
-        Description(header.description)
+private fun ImageHeader(image: Int) {
+    Row(modifier = Modifier
+        .padding(8.dp)) {
+        Image(
+            painter = painterResource(image),
+            contentDescription = "Header",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(96.dp)
+                .clip(RoundedCornerShape(14.dp))
+        )
     }
 }
 
 @Composable
-private fun IngredientsHeader(
-    modifier: Modifier,
-    onHeaderClicked: () -> Unit
-) {
+private fun Title(title: String) {
+    Row(modifier = Modifier
+        .padding(8.dp)
+        .fillMaxWidth()
+    ) {
+        Text(
+            text = title,
+            color = Color.Black,
+            textAlign = TextAlign.Center,
+            fontSize = 28.sp,
+            fontFamily = fontFamilyDancingScript,
+            modifier = Modifier
+                .fillMaxWidth()
+        )
+    }
+}
+
+@Composable
+private fun ServingsInfoSubtitle(servings: Int) {
     Text(
-        text = "Ingredients",
-        fontSize = 20.sp,
-        modifier = modifier
-            .clickable(onClick = { onHeaderClicked() })
-            .padding(16.dp),
+        text = "Serves $servings",
+        color = Color.Black,
+        textAlign = TextAlign.Center,
+        fontSize = 18.sp,
+        fontFamily = fontFamilyDancingScript
     )
 }
 
 @Composable
-private fun Ingredients(ingredients: List<Ingredient>) {
-    val (isExpanded, setIsExpanded) = remember { mutableStateOf(true) }
+private fun CookTimeInfoSubtitle(prepTime: Int) {
+    Text(
+        text = "$prepTime Minutes",
+        color = Color.Black,
+        textAlign = TextAlign.Center,
+        fontSize = 18.sp,
+        fontFamily = fontFamilyDancingScript
+    )
+}
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
+@Composable
+private fun Subtitle(servings: Int, prepTime: Int) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .padding(4.dp)
     ) {
-        IngredientsHeader(
-            modifier = Modifier,
-            onHeaderClicked = { setIsExpanded(!isExpanded) }
-        )
-        AnimatedVisibility(
-            visible = isExpanded,
-            enter = expandVertically(animationSpec = spring()),
-            exit = shrinkVertically(animationSpec = spring())
+        Column(modifier = Modifier
+            .weight(1f),
+            horizontalAlignment = Alignment.End
         ) {
-            IngredientListStateful(ingredients)
+            ServingsInfoSubtitle(servings)
+        }
+        Column(modifier = Modifier) {
+            Text(
+                text = " | ",
+                color = Color.Black,
+                fontSize = 24.sp
+            )
+        }
+        Column(modifier = Modifier
+            .weight(1f),
+            horizontalAlignment = Alignment.Start
+        ) {
+            CookTimeInfoSubtitle(prepTime)
         }
     }
 }
 
 @Composable
-private fun InstructionsHeader(
-    modifier: Modifier,
-    onHeaderClicked: () -> Unit
-) {
-    Text(
-        text = "Instructions",
-        fontSize = 20.sp,
-        modifier = modifier
-            .clickable(onClick = { onHeaderClicked() })
-            .padding(16.dp)
-    )
+private fun Description(description: String) {
+    Row(modifier = Modifier
+        .padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = description,
+            color = Color.Black,
+            textAlign = TextAlign.Center,
+            fontSize = 16.sp,
+            fontFamily = fontFamilyDancingScript
+        )
+    }
 }
 
 @Composable
-private fun Instructions(instructions: List<Instruction>) {
+private fun Header(
+    header: Header,
+    modifier: Modifier
+) {
     val (isExpanded, setIsExpanded) = remember { mutableStateOf(true) }
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .fillMaxWidth()
     ) {
-        InstructionsHeader(
-            modifier = Modifier,
-            onHeaderClicked = { setIsExpanded(!isExpanded) }
-        )
-        AnimatedVisibility(
-            visible = isExpanded,
-            enter = expandVertically(animationSpec = spring()),
-            exit = shrinkVertically(animationSpec = spring())
+        Column {
+            IconButton(
+                onClick = { }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowUp,
+                    contentDescription = "Expand Card",
+                    tint = Color.Black,
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clickable(onClick = { setIsExpanded(!isExpanded) })
+                )
+            }
+        }
+        Column(
+            modifier = modifier
+                .weight(1f)
         ) {
-            InstructionListStateful(instructions)
+            Title(header.title)
+        }
+        Column {
+            IconButton(
+                onClick = { }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Favorite,
+                    contentDescription = "Expand Card",
+                    tint = Color.Black,
+                    modifier = Modifier
+                        .size(22.dp)
+                        .clickable(onClick = { setIsExpanded(!isExpanded) })
+                )
+            }
+        }
+    }
+    AnimatedVisibility(
+        visible = isExpanded,
+        enter = expandVertically(animationSpec = spring()),
+        exit = shrinkVertically(animationSpec = spring())
+    ) {
+        Column(
+            modifier = modifier
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            ImageHeader(header.image)
+            Subtitle(header.servings, header.prepTime)
+            Description(header.description)
         }
     }
 }
@@ -183,49 +229,248 @@ private fun Instructions(instructions: List<Instruction>) {
 @Composable
 fun RecipeCard(modifier: PaddingValues, recipe: Recipe) {
     val configuration = LocalConfiguration.current
+
+    val ingredientStates = rememberSaveable(
+        saver = listSaver(
+            save = { it.map { ingredient -> listOf(ingredient.name, ingredient.isChecked) } },
+            restore = { savedList ->
+                mutableStateListOf(*savedList.map { Ingredient(it[0] as String, it[1] as Boolean) }.toTypedArray())
+            }
+        )
+    ) { mutableStateListOf(*recipe.ingredients.toTypedArray()) }
+
+    val instructionStates = rememberSaveable(
+        saver = listSaver(
+            save = { it.map { instruction -> listOf(instruction.name, instruction.isChecked) } },
+            restore = { savedList ->
+                mutableStateListOf(*savedList.map { Instruction(it[0] as String, it[1] as Boolean) }.toTypedArray())
+            }
+        )
+    ) { mutableStateListOf(*recipe.instructions.toTypedArray()) }
+
     when (configuration.orientation) {
         Configuration.ORIENTATION_PORTRAIT ->
-            RecipeCardPortrait(recipe)
+            RecipeCardPortrait(
+                recipe = recipe,
+                ingredients = ingredientStates,
+                onIngredientsCheckedChange = { index, checked ->
+                    ingredientStates[index] = ingredientStates[index].copy(isChecked = checked)
+                },
+                instructions = instructionStates,
+                onInstructionsCheckedChange = { index, checked ->
+                    instructionStates[index] = instructionStates[index].copy(isChecked = checked)
+                }
+            )
         Configuration.ORIENTATION_LANDSCAPE ->
-            RecipeCardLandscape(recipe)
-        else -> RecipeCardPortrait(recipe)
+            RecipeCardLandscape(
+                recipe,
+                modifier = Modifier,
+                ingredients = ingredientStates,
+                onIngredientsCheckedChange = { index, checked ->
+                    ingredientStates[index] = ingredientStates[index].copy(isChecked = checked)
+                },
+                instructions = instructionStates,
+                onInstructionsCheckedChange = { index, checked ->
+                    instructionStates[index] = instructionStates[index].copy(isChecked = checked)
+                }
+            )
+        else -> RecipeCardPortrait(
+            recipe,
+            ingredients = ingredientStates,
+            onIngredientsCheckedChange = { index, checked ->
+                ingredientStates[index] = ingredientStates[index].copy(isChecked = checked)
+            },
+            instructions = instructionStates,
+            onInstructionsCheckedChange = { index, checked ->
+                instructionStates[index] = instructionStates[index].copy(isChecked = checked)
+            }
+        )
     }
 }
 
 @Composable
-fun RecipeCardPortrait(recipe: Recipe) {
-    val header = Header(recipe.image, recipe.title, recipe.servings, recipe.prepTime, recipe.description)
+fun RecipeCardPortrait(
+    recipe: Recipe,
+    ingredients: List<Ingredient>,
+    onIngredientsCheckedChange: (Int, Boolean) -> Unit,
+    instructions: List<Instruction>,
+    onInstructionsCheckedChange: (Int, Boolean) -> Unit
+) {
+    val header = Header(
+        recipe.image,
+        recipe.title,
+        recipe.servings,
+        recipe.prepTime,
+        recipe.description
+    )
 
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
+    val (isCollapsedIngredientsList, setIsCollapsedIngredientsList) = remember { mutableStateOf(true) }
+    val (isFullScreenIngredients, setIsFullScreenIngredients) = remember { mutableStateOf(false) }
+    val (isCollapsedInstructionsList, setIsCollapsedInstructionsList) = remember { mutableStateOf(false) }
+    val (isFullScreenInstructions, setIsFullScreenInstructions) = remember { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
     ) {
-        Header(header)
-        Ingredients(recipe.ingredients)
-        Instructions(recipe.instructions)
+        Image(
+            painter = painterResource(id = R.drawable.background_image_01),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.matchParentSize()
+        )
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .background(Color.White.copy(alpha = 0.7f))
+        )
+        Column(
+            modifier = Modifier.padding(top = 24.dp)
+        ) {
+            if (!isFullScreenIngredients && !isFullScreenInstructions) {
+                Header(
+                    header = header,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+                if (isCollapsedIngredientsList) {
+                    IngredientsHeader(
+                        onCollapseIngredientsListClicked = { setIsCollapsedIngredientsList(false) },
+                        onFullScreenIngredientsClicked = { setIsFullScreenIngredients(true) }
+                    )
+                } else {
+                    Ingredients(
+                        ingredients = ingredients,
+                        onCheckedChange = onIngredientsCheckedChange,
+                        onCollapseIngredientsListClicked = { setIsCollapsedIngredientsList(true) },
+                        onFullScreenIngredientsClicked = { setIsFullScreenIngredients(true) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                }
+                Spacer(modifier = Modifier.size(4.dp))
+                if (isCollapsedInstructionsList) {
+                    InstructionsHeader(
+                        onCollapseInstructionsHeaderClicked = { setIsCollapsedInstructionsList(false) },
+                        onFullScreenInstructionsClicked = { setIsFullScreenInstructions(true) }
+                    )
+                } else {
+                    Instructions(
+                        instructions = instructions,
+                        onCheckedChange = onInstructionsCheckedChange,
+                        onCollapseInstructionsHeaderClicked = { setIsCollapsedInstructionsList(true) },
+                        onFullScreenInstructionsClicked = { setIsFullScreenInstructions(true) },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                }
+            } else if (isFullScreenIngredients) {
+                Ingredients(
+                    ingredients = ingredients,
+                    onCheckedChange = onIngredientsCheckedChange,
+                    onCollapseIngredientsListClicked = { setIsCollapsedIngredientsList(false) },
+                    onFullScreenIngredientsClicked = { setIsFullScreenIngredients(false) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxSize()
+                )
+            } else {
+                Instructions(
+                    instructions = instructions,
+                    onCheckedChange = onInstructionsCheckedChange,
+                    onCollapseInstructionsHeaderClicked = { setIsCollapsedInstructionsList(false) },
+                    onFullScreenInstructionsClicked = { setIsFullScreenInstructions(false) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxSize()
+                )
+            }
+        }
     }
 }
 
 @Composable
-fun RecipeCardLandscape(recipe: Recipe) {
-    val header = Header(recipe.image, recipe.title, recipe.servings, recipe.prepTime, recipe.description)
+fun RecipeCardLandscape(
+    recipe: Recipe,
+    ingredients: List<Ingredient>,
+    onIngredientsCheckedChange: (Int, Boolean) -> Unit,
+    instructions: List<Instruction>,
+    onInstructionsCheckedChange: (Int, Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val header =
+        Header(recipe.image, recipe.title, recipe.servings, recipe.prepTime, recipe.description)
 
-    Row {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.weight(0.5f)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.background_image_01),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.matchParentSize()
+        )
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .background(Color.White.copy(alpha = 0.7f))
+        )
+        Row(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(top = 24.dp, start = 24.dp)
         ) {
-            Header(header)
-        }
-        Column(
-            modifier = Modifier.weight(0.25f)
-        ) {
-            Ingredients(recipe.ingredients)
-        }
-        Column(
-            modifier = Modifier.weight(0.25f)
-        ) {
-            Instructions(recipe.instructions)
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = modifier
+                    .weight(.5f)
+            ) {
+                Row(
+                    modifier = modifier
+                        .padding(4.dp)
+                ) {
+                    Header(
+                        header = header,
+                        modifier = modifier
+                    )
+                }
+            }
+            Column(
+                modifier = modifier
+                    .weight(1f)
+            ) {
+                Row(
+                    modifier = modifier
+                        .weight(1f)
+                        .padding(12.dp)
+                ) {
+                    Ingredients(
+                        ingredients,
+                        onCheckedChange = onIngredientsCheckedChange,
+                        onCollapseIngredientsListClicked = { },
+                        onFullScreenIngredientsClicked = { },
+                        modifier = modifier)
+                }
+            }
+            Column(
+                modifier = modifier
+                    .weight(1f)
+            ) {
+                Row(
+                    modifier = modifier
+                        .weight(1f)
+                        .padding(12.dp)
+                ) {
+                    Instructions(
+                        instructions,
+                        onCheckedChange = onInstructionsCheckedChange,
+                        onCollapseInstructionsHeaderClicked = { },
+                        onFullScreenInstructionsClicked = { },
+                        modifier = modifier
+                    )
+                }
+            }
         }
     }
 }
