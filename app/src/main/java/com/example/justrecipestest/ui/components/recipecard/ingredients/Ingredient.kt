@@ -1,4 +1,4 @@
-package com.example.justrecipestest
+package com.example.justrecipestest.ui.components.recipecard.ingredients
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,7 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,37 +22,41 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import com.example.justrecipestest.R
+import com.example.justrecipestest.data.model.Ingredient
 
 @Composable
-fun InstructionStateful(
-    instruction: Instruction,
-    onInstructionCheckedChanged: (Instruction) -> Unit
+fun IngredientStateful(
+    ingredient: Ingredient,
+    onIngredientCheckedChanged: (Ingredient) -> Unit
 ) {
-    var isChecked by remember { mutableStateOf(instruction.isChecked) }
+    var isChecked by rememberSaveable { mutableStateOf(ingredient.isChecked) }
 
-    InstructionStateless(
+    IngredientStateless(
         checked = isChecked,
-        instructionText = instruction.name,
+        ingredientText = ingredient.name,
         onCheckedChange = {
             isChecked = it
-            onInstructionCheckedChanged(instruction.copy(isChecked = it))
+            onIngredientCheckedChanged(ingredient.copy(isChecked = it))
         }
     )
 }
 
 @Composable
-fun InstructionStateless(
+fun IngredientStateless(
     checked: Boolean,
-    instructionText: String,
+    ingredientText: String,
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
+
     val fontFamilyDancingScript = FontFamily(
         Font(R.font.dancing_script, FontWeight.Bold),
     )
 
     Row(
         horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
     ) {
@@ -73,30 +77,26 @@ fun InstructionStateless(
         }
         Column(
             horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.Center,
             modifier = Modifier
-                .weight(4f)
+                .weight(2f)
                 .padding(8.dp)
         ) {
             Text(
-                text = instructionText,
+                text = ingredientText,
                 color = Color.Black,
                 fontSize = 22.sp,
-                fontFamily = fontFamilyDancingScript,
+                fontFamily = fontFamilyDancingScript
             )
         }
     }
 }
 
-data class Instruction(
-    val name: String,
-    val isChecked: Boolean
-)
-
 @Preview
 @Composable
-fun InstructionPreview() {
-    InstructionStateful(
-        instruction = Instruction("Preheat oven to 350°F and do a bunch of other stuff while you're waiting, then keep doing more stuff and don't stop doing things so this gets really big.", false),
-        onInstructionCheckedChanged = {}
+fun IngredientPreview() {
+    IngredientStateful(
+        ingredient = Ingredient("Flour", false),
+        onIngredientCheckedChanged = {}
     )
 }
