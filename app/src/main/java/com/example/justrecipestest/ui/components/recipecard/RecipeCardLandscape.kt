@@ -27,9 +27,10 @@ import com.example.justrecipestest.ui.theme.JustRecipesTestTheme
 @Composable
 fun RecipeCardLandscape(
     recipe: Recipe,
+    ingredients: List<Ingredient>,
     onIngredientsCheckedChange: (Int, Boolean) -> Unit,
+    instructions: List<Instruction>,
     onInstructionsCheckedChange: (Int, Boolean) -> Unit,
-    modifier: Modifier = Modifier
 ) {
     val header =
         Header(recipe.image, recipe.title, recipe.servings, recipe.prepTime, recipe.description)
@@ -50,57 +51,57 @@ fun RecipeCardLandscape(
                 .background(Color.White.copy(alpha = 0.7f))
         )
         Row(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(top = 24.dp, start = 24.dp)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = modifier
+                modifier = Modifier
                     .weight(.5f)
             ) {
                 Row(
-                    modifier = modifier
+                    modifier = Modifier
                         .padding(4.dp)
                 ) {
                     Header(
                         header = header,
-                        modifier = modifier
+                        modifier = Modifier
                     )
                 }
             }
             Column(
-                modifier = modifier
+                modifier = Modifier
                     .weight(1f)
             ) {
                 Row(
-                    modifier = modifier
+                    modifier = Modifier
                         .weight(1f)
                         .padding(12.dp)
                 ) {
                     Ingredients(
-                        recipe.ingredients,
+                        ingredients,
                         onCheckedChange = onIngredientsCheckedChange,
                         onCollapseIngredientsList = { },
                         onFullScreenIngredientsClicked = { },
-                        modifier = modifier)
+                        modifier = Modifier)
                 }
             }
             Column(
-                modifier = modifier
+                modifier = Modifier
                     .weight(1f)
             ) {
                 Row(
-                    modifier = modifier
+                    modifier = Modifier
                         .weight(1f)
                         .padding(12.dp)
                 ) {
                     Instructions(
-                        recipe.instructions,
+                        instructions,
                         onCheckedChange = onInstructionsCheckedChange,
                         onCollapseInstructionsList = { },
                         onFullScreenInstructionsClicked = { },
-                        modifier = modifier
+                        modifier = Modifier
                     )
                 }
             }
@@ -135,7 +136,21 @@ private fun RecipeCardLandscapePreview() {
                 ),
                 image = R.drawable.header_02
             ),
+            ingredients = listOf(
+                Ingredient("Ingredient 1", false),
+                Ingredient("Ingredient 2", false),
+                Ingredient("Ingredient 3", false),
+                Ingredient("Ingredient 4", false),
+                Ingredient("Ingredient 5", false)
+            ),
             onIngredientsCheckedChange = { _, _ -> },
+            instructions = listOf(
+                Instruction("Instruction 1", false),
+                Instruction("Instruction 2", false),
+                Instruction("Instruction 3", false),
+                Instruction("Instruction 4", false),
+                Instruction("Instruction 5", false)
+            ),
             onInstructionsCheckedChange = { _, _ -> }
         )
     }

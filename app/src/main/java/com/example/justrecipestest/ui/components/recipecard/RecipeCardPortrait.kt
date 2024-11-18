@@ -30,7 +30,9 @@ import com.example.justrecipestest.ui.components.recipecard.instructions.Instruc
 @Composable
 fun RecipeCardPortrait(
     recipe: Recipe,
+    ingredients: List<Ingredient>,
     onIngredientsCheckedChange: (Int, Boolean) -> Unit,
+    instructions: List<Instruction>,
     onInstructionsCheckedChange: (Int, Boolean) -> Unit
 ) {
     val header = Header(
@@ -76,7 +78,7 @@ fun RecipeCardPortrait(
                         .weight(1f)
                 ) {
                     Ingredients(
-                        ingredients = recipe.ingredients,
+                        ingredients = ingredients,
                         onCheckedChange = onIngredientsCheckedChange,
                         onCollapseIngredientsList = { setIsCollapsedIngredientsList(!isCollapsedIngredientsList) },
                         onFullScreenIngredientsClicked = { setIsFullScreenIngredients(true) },
@@ -88,7 +90,7 @@ fun RecipeCardPortrait(
                     )
                     Spacer(modifier = Modifier.size(4.dp))
                     Instructions(
-                        instructions = recipe.instructions,
+                        instructions = instructions,
                         onCheckedChange = onInstructionsCheckedChange,
                         onCollapseInstructionsList = { setIsCollapsedInstructionsList(!isCollapsedInstructionsList) },
                         onFullScreenInstructionsClicked = { setIsFullScreenInstructions(true) },
@@ -107,7 +109,7 @@ fun RecipeCardPortrait(
                 }
             } else if (isFullScreenIngredients) {
                 Ingredients(
-                    ingredients = recipe.ingredients,
+                    ingredients = ingredients,
                     onCheckedChange = onIngredientsCheckedChange,
                     onCollapseIngredientsList = { setIsCollapsedIngredientsList(false) },
                     onFullScreenIngredientsClicked = { setIsFullScreenIngredients(false) },
@@ -117,7 +119,7 @@ fun RecipeCardPortrait(
                 )
             } else {
                 Instructions(
-                    instructions = recipe.instructions,
+                    instructions = instructions,
                     onCheckedChange = onInstructionsCheckedChange,
                     onCollapseInstructionsList = { setIsCollapsedInstructionsList(false) },
                     onFullScreenInstructionsClicked = { setIsFullScreenInstructions(false) },
@@ -157,7 +159,21 @@ fun PreviewRecipeCardPortrait() {
                 Instruction("Stir in boiling water (batter will be thin). Pour batter into prepared pans.", false),
             )
         ),
+        ingredients = listOf(
+            Ingredient("Flour", false),
+            Ingredient("Sugar", false),
+            Ingredient("Cocoa Powder", false),
+            Ingredient("Baking Powder", false),
+            Ingredient("Baking Soda", false),
+        ),
         onIngredientsCheckedChange = { _, _ -> },
+        instructions = listOf(
+            Instruction("Preheat oven to 350°F.", false),
+            Instruction("Grease and flour two 9-inch round baking pans.", false),
+            Instruction("Mix together flour, sugar, cocoa, baking powder, baking soda, and salt in a large bowl.", false),
+            Instruction("Add eggs, milk, oil, and vanilla; beat on medium speed of mixer 2 minutes.", false),
+            Instruction("Stir in boiling water (batter will be thin). Pour batter into prepared pans.", false),
+        ),
         onInstructionsCheckedChange = { _, _ -> }
         )
 }

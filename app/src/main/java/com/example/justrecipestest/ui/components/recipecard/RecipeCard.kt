@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -67,9 +66,11 @@ fun RecipeCard(modifier: PaddingValues, recipe: Recipe) {
         Configuration.ORIENTATION_PORTRAIT ->
             RecipeCardPortrait(
                 recipe = recipe,
+                ingredients = ingredientStates,
                 onIngredientsCheckedChange = { index, checked ->
                     ingredientStates[index] = ingredientStates[index].copy(isChecked = checked)
                 },
+                instructions = instructionStates,
                 onInstructionsCheckedChange = { index, checked ->
                     instructionStates[index] = instructionStates[index].copy(isChecked = checked)
                 }
@@ -77,19 +78,22 @@ fun RecipeCard(modifier: PaddingValues, recipe: Recipe) {
         Configuration.ORIENTATION_LANDSCAPE ->
             RecipeCardLandscape(
                 recipe,
-                modifier = Modifier,
+                ingredients = ingredientStates,
                 onIngredientsCheckedChange = { index, checked ->
                     ingredientStates[index] = ingredientStates[index].copy(isChecked = checked)
                 },
+                instructions = instructionStates,
                 onInstructionsCheckedChange = { index, checked ->
                     instructionStates[index] = instructionStates[index].copy(isChecked = checked)
                 }
             )
         else -> RecipeCardPortrait(
             recipe,
+            ingredients = ingredientStates,
             onIngredientsCheckedChange = { index, checked ->
                 ingredientStates[index] = ingredientStates[index].copy(isChecked = checked)
             },
+            instructions = instructionStates,
             onInstructionsCheckedChange = { index, checked ->
                 instructionStates[index] = instructionStates[index].copy(isChecked = checked)
             }
