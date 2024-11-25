@@ -6,6 +6,7 @@ data class Recipe(
     val servings: Int,
     val prepTime: Int,
     val description: String,
+    val isFavorite: Boolean,
     val ingredients: List<Ingredient>,
     val instructions: List<Instruction>
 )

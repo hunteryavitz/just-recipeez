@@ -66,6 +66,8 @@ fun RecipeCardLandscape(
                 ) {
                     Header(
                         header = header,
+                        setIsFavorite = {},
+                        isFavorite = false,
                         modifier = Modifier
                     )
                 }
@@ -120,6 +122,7 @@ private fun RecipeCardLandscapePreview() {
                 servings = 4,
                 prepTime = 30,
                 description = "Recipe Description",
+                isFavorite = false,
                 ingredients = listOf(
                     Ingredient("Ingredient 1", false),
                     Ingredient("Ingredient 2", false),

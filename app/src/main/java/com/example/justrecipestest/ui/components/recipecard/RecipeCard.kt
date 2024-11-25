@@ -4,6 +4,8 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalConfiguration
@@ -20,6 +22,7 @@ val recipe = Recipe(
     servings = 8,
     prepTime = 60,
     description = "A delicious chocolate cake for all occasions",
+    isFavorite = false,
     ingredients = listOf(
         Ingredient("Flour", false),
         Ingredient("Sugar", false),
@@ -43,6 +46,7 @@ val recipe = Recipe(
 @Composable
 fun RecipeCard(modifier: PaddingValues, recipe: Recipe) {
     val configuration = LocalConfiguration.current
+    val (isFavorite, setIsFavorite) = remember { mutableStateOf(recipe.isFavorite) }
 
     val ingredientStates = rememberSaveable(
         saver = listSaver(
@@ -67,6 +71,8 @@ fun RecipeCard(modifier: PaddingValues, recipe: Recipe) {
             RecipeCardPortrait(
                 recipe = recipe,
                 ingredients = ingredientStates,
+                setIsFavorite = { setIsFavorite(!isFavorite) },
+                isFavorite = isFavorite,
                 onIngredientsCheckedChange = { index, checked ->
                     ingredientStates[index] = ingredientStates[index].copy(isChecked = checked)
                 },
@@ -90,6 +96,8 @@ fun RecipeCard(modifier: PaddingValues, recipe: Recipe) {
         else -> RecipeCardPortrait(
             recipe,
             ingredients = ingredientStates,
+            setIsFavorite = { setIsFavorite(!isFavorite) },
+            isFavorite = isFavorite,
             onIngredientsCheckedChange = { index, checked ->
                 ingredientStates[index] = ingredientStates[index].copy(isChecked = checked)
             },

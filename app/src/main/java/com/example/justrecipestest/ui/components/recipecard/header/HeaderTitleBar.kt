@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,6 +24,8 @@ fun HeaderTitleBar(
     header: Header,
     isExpanded: Boolean,
     setIsExpanded: (Boolean) -> Unit,
+    isFavorite: Boolean,
+    setIsFavorite: (Boolean) -> Unit,
     modifier: Modifier
 ) {
     Row(
@@ -53,15 +56,14 @@ fun HeaderTitleBar(
         }
         Column {
             IconButton(
-                onClick = { }
+                onClick = { setIsFavorite(!isFavorite) }
             ) {
                 Icon(
-                    imageVector = Icons.Default.Favorite,
+                    imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                     contentDescription = "Expand Card",
                     tint = Color.Black,
                     modifier = modifier
                         .size(22.dp)
-                        .clickable(onClick = { setIsExpanded(!isExpanded) })
                 )
             }
         }
@@ -82,6 +84,8 @@ fun PreviewHeaderTitleBar() {
         ),
         isExpanded = true,
         setIsExpanded = { },
+        isFavorite = false,
+        setIsFavorite = { },
         modifier = Modifier
     )
 }

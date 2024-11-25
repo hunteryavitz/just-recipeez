@@ -19,6 +19,7 @@ val recipe = Recipe(
     servings = 8,
     prepTime = 60,
     description = "A delicious chocolate cake for all occasions",
+    isFavorite = false,
     ingredients = listOf(
         Ingredient("Flour", false),
         Ingredient("Sugar", false),

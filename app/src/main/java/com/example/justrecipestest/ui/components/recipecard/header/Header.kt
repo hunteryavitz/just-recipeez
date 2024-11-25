@@ -25,6 +25,8 @@ data class Header(
 @Composable
 fun Header(
     header: Header,
+    setIsFavorite: (Boolean) -> Unit,
+    isFavorite: Boolean,
     modifier: Modifier
 ) {
     val (isExpanded, setIsExpanded) = remember { mutableStateOf(true) }
@@ -33,6 +35,8 @@ fun Header(
         header = header,
         isExpanded = isExpanded,
         setIsExpanded = setIsExpanded,
+        isFavorite = isFavorite,
+        setIsFavorite = setIsFavorite,
         modifier = modifier
     )
     AnimatedVisibility(
@@ -64,6 +68,8 @@ fun PreviewHeader() {
             prepTime = 30,
             description = "This is a delicious chocolate cake recipe that is perfect for any occasion."
         ),
+        setIsFavorite = {},
+        isFavorite = false,
         modifier = Modifier
     )
 }

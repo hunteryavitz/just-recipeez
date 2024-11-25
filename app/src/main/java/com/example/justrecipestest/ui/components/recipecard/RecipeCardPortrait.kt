@@ -1,6 +1,9 @@
 package com.example.justrecipestest.ui.components.recipecard
 
 import android.content.res.Configuration
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -11,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -30,6 +34,8 @@ import com.example.justrecipestest.ui.components.recipecard.instructions.Instruc
 @Composable
 fun RecipeCardPortrait(
     recipe: Recipe,
+    setIsFavorite: (Boolean) -> Unit,
+    isFavorite: Boolean,
     ingredients: List<Ingredient>,
     onIngredientsCheckedChange: (Int, Boolean) -> Unit,
     instructions: List<Instruction>,
@@ -44,8 +50,16 @@ fun RecipeCardPortrait(
     )
 
     val (isCollapsedIngredientsList, setIsCollapsedIngredientsList) = remember { mutableStateOf(false) }
+    val ingredientsListWeight by animateFloatAsState(
+        targetValue = if (isCollapsedIngredientsList) 0.1f else 0.5f,
+        label = ""
+    )
     val (isFullScreenIngredients, setIsFullScreenIngredients) = remember { mutableStateOf(false) }
     val (isCollapsedInstructionsList, setIsCollapsedInstructionsList) = remember { mutableStateOf(false) }
+    val instructionsListWeight by animateFloatAsState(
+        targetValue = if (isCollapsedInstructionsList) 0.1f else 0.5f,
+        label = ""
+    )
     val (isFullScreenInstructions, setIsFullScreenInstructions) = remember { mutableStateOf(false) }
 
     Box(
@@ -69,6 +83,8 @@ fun RecipeCardPortrait(
             if (!isFullScreenIngredients && !isFullScreenInstructions) {
                 Header(
                     header = header,
+                    setIsFavorite = setIsFavorite,
+                    isFavorite = isFavorite,
                     modifier = Modifier
                         .fillMaxWidth()
                 )
@@ -84,9 +100,8 @@ fun RecipeCardPortrait(
                         onFullScreenIngredientsClicked = { setIsFullScreenIngredients(true) },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(
-                                if (isCollapsedIngredientsList) 0.1f else 0.5f
-                            )
+                            .weight(ingredientsListWeight)
+                            .animateContentSize(animationSpec = tween(durationMillis = 300))
                     )
                     Spacer(modifier = Modifier.size(4.dp))
                     Instructions(
@@ -96,9 +111,8 @@ fun RecipeCardPortrait(
                         onFullScreenInstructionsClicked = { setIsFullScreenInstructions(true) },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(
-                                if (isCollapsedInstructionsList) 0.1f else 0.5f
-                            )
+                            .weight(instructionsListWeight)
+                            .animateContentSize(animationSpec = tween(durationMillis = 300))
                     )
                     Spacer(modifier = Modifier
                         .size(4.dp)
@@ -137,13 +151,13 @@ fun RecipeCardPortrait(
 @Composable
 fun PreviewRecipeCardPortrait() {
     RecipeCardPortrait(
-
         recipe = Recipe(
             image = R.drawable.header_02,
             title = "Chocolate Cake",
             servings = 4,
             prepTime = 30,
             description = "A delicious chocolate cake recipe.",
+            isFavorite = false,
             ingredients = listOf(
                 Ingredient("Flour", false),
                 Ingredient("Sugar", false),
@@ -159,6 +173,8 @@ fun PreviewRecipeCardPortrait() {
                 Instruction("Stir in boiling water (batter will be thin). Pour batter into prepared pans.", false),
             )
         ),
+        setIsFavorite = {},
+        isFavorite = false,
         ingredients = listOf(
             Ingredient("Flour", false),
             Ingredient("Sugar", false),
