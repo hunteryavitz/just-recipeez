@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,11 +20,11 @@ import com.example.justrecipestest.ui.theme.JustRecipesTestTheme
 fun Instructions(
     instructions: List<Instruction>,
     onCheckedChange: (Int, Boolean) -> Unit,
+    isExpanded: Boolean,
     onCollapseInstructionsList: () -> Unit,
     onFullScreenInstructionsClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val (isExpanded, setIsExpanded) = remember { mutableStateOf(true) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -34,10 +32,8 @@ fun Instructions(
             .border(3.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
     ) {
         InstructionsHeader(
-            onCollapseInstructionsHeaderClicked = {
-                setIsExpanded(!isExpanded)
-                onCollapseInstructionsList()
-                                                  },
+            isExpanded = isExpanded,
+            onCollapseInstructionsHeaderClicked = { onCollapseInstructionsList() },
             onFullScreenInstructionsClicked = onFullScreenInstructionsClicked
         )
         AnimatedVisibility(
@@ -66,6 +62,7 @@ private fun InstructionsPreview() {
             ),
             onCheckedChange = { _, _ -> },
             onCollapseInstructionsList = { },
+            isExpanded = true,
             onFullScreenInstructionsClicked = { }
         )
     }

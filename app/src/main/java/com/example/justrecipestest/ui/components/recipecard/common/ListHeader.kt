@@ -32,6 +32,7 @@ val fontFamilyDancingScript = FontFamily(
 @Composable
 fun ListHeader(
     title: String,
+    isExpanded: Boolean,
     onCollapseListClicked: () -> Unit,
     onFullScreenListClicked: () -> Unit
 ) {
@@ -42,15 +43,14 @@ fun ListHeader(
     ) {
         Column {
             IconButton(
-                onClick = { }
+                onClick = { onCollapseListClicked() }
             ) {
                 Icon(
-                    imageVector = Icons.Default.KeyboardArrowUp,
+                    imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                     contentDescription = "Expand Card",
                     tint = Color.Black,
                     modifier = Modifier
                         .size(32.dp)
-                        .clickable(onClick = onCollapseListClicked)
                 )
             }
         }
@@ -64,7 +64,7 @@ fun ListHeader(
         }
         Column {
             IconButton(
-                onClick = { }
+                onClick = { onFullScreenListClicked() }
             ) {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowDown,
@@ -72,7 +72,6 @@ fun ListHeader(
                     tint = Color.Black,
                     modifier = Modifier
                         .size(32.dp)
-                        .clickable(onClick = onFullScreenListClicked)
                 )
             }
         }
@@ -86,6 +85,7 @@ public fun ListHeaderPreview() {
     JustRecipesTestTheme {
         ListHeader(
             title = "List Header",
+            isExpanded = false,
             onCollapseListClicked = { },
             onFullScreenListClicked = { }
         )

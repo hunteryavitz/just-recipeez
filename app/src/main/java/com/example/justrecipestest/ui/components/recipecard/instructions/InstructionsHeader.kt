@@ -13,6 +13,7 @@ import com.example.justrecipestest.ui.theme.JustRecipesTestTheme
 
 @Composable
 fun InstructionsHeader(
+    isExpanded: Boolean,
     onCollapseInstructionsHeaderClicked: () -> Unit,
     onFullScreenInstructionsClicked: () -> Unit,
     modifier: Modifier = Modifier
@@ -25,6 +26,7 @@ fun InstructionsHeader(
     ) {
         ListHeader(
             title = "Instructions",
+            isExpanded = isExpanded,
             onCollapseListClicked = onCollapseInstructionsHeaderClicked,
             onFullScreenListClicked = onFullScreenInstructionsClicked
         )
@@ -37,6 +39,7 @@ fun InstructionsHeader(
 private fun InstructionsHeaderPreview() {
     JustRecipesTestTheme {
         InstructionsHeader(
+            isExpanded = false,
             onCollapseInstructionsHeaderClicked = { },
             onFullScreenInstructionsClicked = { }
         )

@@ -96,6 +96,7 @@ fun RecipeCardPortrait(
                     Ingredients(
                         ingredients = ingredients,
                         onCheckedChange = onIngredientsCheckedChange,
+                        isExpanded = !isCollapsedIngredientsList,
                         onCollapseIngredientsList = { setIsCollapsedIngredientsList(!isCollapsedIngredientsList) },
                         onFullScreenIngredientsClicked = { setIsFullScreenIngredients(true) },
                         modifier = Modifier
@@ -107,6 +108,7 @@ fun RecipeCardPortrait(
                     Instructions(
                         instructions = instructions,
                         onCheckedChange = onInstructionsCheckedChange,
+                        isExpanded = !isCollapsedInstructionsList,
                         onCollapseInstructionsList = { setIsCollapsedInstructionsList(!isCollapsedInstructionsList) },
                         onFullScreenInstructionsClicked = { setIsFullScreenInstructions(true) },
                         modifier = Modifier
@@ -125,6 +127,7 @@ fun RecipeCardPortrait(
                 Ingredients(
                     ingredients = ingredients,
                     onCheckedChange = onIngredientsCheckedChange,
+                    isExpanded = !isCollapsedIngredientsList,
                     onCollapseIngredientsList = { setIsCollapsedIngredientsList(false) },
                     onFullScreenIngredientsClicked = { setIsFullScreenIngredients(false) },
                     modifier = Modifier
@@ -135,6 +138,7 @@ fun RecipeCardPortrait(
                 Instructions(
                     instructions = instructions,
                     onCheckedChange = onInstructionsCheckedChange,
+                    isExpanded = !isCollapsedInstructionsList,
                     onCollapseInstructionsList = { setIsCollapsedInstructionsList(false) },
                     onFullScreenInstructionsClicked = { setIsFullScreenInstructions(false) },
                     modifier = Modifier
