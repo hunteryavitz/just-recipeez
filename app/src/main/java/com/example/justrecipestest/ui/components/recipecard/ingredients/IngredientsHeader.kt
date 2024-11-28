@@ -15,6 +15,7 @@ import com.example.justrecipestest.ui.theme.JustRecipesTestTheme
 fun IngredientsHeader(
     isExpanded: Boolean,
     onCollapseIngredientsListClicked: () -> Unit,
+    isFullScreen: Boolean,
     onFullScreenIngredientsClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -28,6 +29,7 @@ fun IngredientsHeader(
             title = "Ingredients",
             isExpanded = isExpanded,
             onCollapseListClicked = onCollapseIngredientsListClicked,
+            isFullScreen = isFullScreen,
             onFullScreenListClicked = onFullScreenIngredientsClicked
         )
     }
@@ -41,6 +43,7 @@ private fun IngredientsHeaderPreview() {
         IngredientsHeader(
             isExpanded = false,
             onCollapseIngredientsListClicked = { },
+            isFullScreen = false,
             onFullScreenIngredientsClicked = { }
         )
     }

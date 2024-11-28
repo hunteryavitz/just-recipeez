@@ -98,6 +98,7 @@ fun RecipeCardPortrait(
                         onCheckedChange = onIngredientsCheckedChange,
                         isExpanded = !isCollapsedIngredientsList,
                         onCollapseIngredientsList = { setIsCollapsedIngredientsList(!isCollapsedIngredientsList) },
+                        isFullScreen = false,
                         onFullScreenIngredientsClicked = { setIsFullScreenIngredients(true) },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -110,6 +111,7 @@ fun RecipeCardPortrait(
                         onCheckedChange = onInstructionsCheckedChange,
                         isExpanded = !isCollapsedInstructionsList,
                         onCollapseInstructionsList = { setIsCollapsedInstructionsList(!isCollapsedInstructionsList) },
+                        isFullScreen = false,
                         onFullScreenInstructionsClicked = { setIsFullScreenInstructions(true) },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -129,6 +131,7 @@ fun RecipeCardPortrait(
                     onCheckedChange = onIngredientsCheckedChange,
                     isExpanded = !isCollapsedIngredientsList,
                     onCollapseIngredientsList = { setIsCollapsedIngredientsList(false) },
+                    isFullScreen = true,
                     onFullScreenIngredientsClicked = { setIsFullScreenIngredients(false) },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -140,6 +143,7 @@ fun RecipeCardPortrait(
                     onCheckedChange = onInstructionsCheckedChange,
                     isExpanded = !isCollapsedInstructionsList,
                     onCollapseInstructionsList = { setIsCollapsedInstructionsList(false) },
+                    isFullScreen = true,
                     onFullScreenInstructionsClicked = { setIsFullScreenInstructions(false) },
                     modifier = Modifier
                         .fillMaxWidth()

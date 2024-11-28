@@ -22,6 +22,7 @@ fun Instructions(
     onCheckedChange: (Int, Boolean) -> Unit,
     isExpanded: Boolean,
     onCollapseInstructionsList: () -> Unit,
+    isFullScreen: Boolean,
     onFullScreenInstructionsClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -34,6 +35,7 @@ fun Instructions(
         InstructionsHeader(
             isExpanded = isExpanded,
             onCollapseInstructionsHeaderClicked = { onCollapseInstructionsList() },
+            isFullScreen = isFullScreen,
             onFullScreenInstructionsClicked = onFullScreenInstructionsClicked
         )
         AnimatedVisibility(
@@ -61,8 +63,9 @@ private fun InstructionsPreview() {
                 Instruction("Add milk and chocolate", false),
             ),
             onCheckedChange = { _, _ -> },
-            onCollapseInstructionsList = { },
             isExpanded = true,
+            onCollapseInstructionsList = { },
+            isFullScreen = true,
             onFullScreenInstructionsClicked = { }
         )
     }

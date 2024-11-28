@@ -15,6 +15,7 @@ import com.example.justrecipestest.ui.theme.JustRecipesTestTheme
 fun InstructionsHeader(
     isExpanded: Boolean,
     onCollapseInstructionsHeaderClicked: () -> Unit,
+    isFullScreen: Boolean,
     onFullScreenInstructionsClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -28,6 +29,7 @@ fun InstructionsHeader(
             title = "Instructions",
             isExpanded = isExpanded,
             onCollapseListClicked = onCollapseInstructionsHeaderClicked,
+            isFullScreen = isFullScreen,
             onFullScreenListClicked = onFullScreenInstructionsClicked
         )
     }
@@ -41,6 +43,7 @@ private fun InstructionsHeaderPreview() {
         InstructionsHeader(
             isExpanded = false,
             onCollapseInstructionsHeaderClicked = { },
+            isFullScreen = false,
             onFullScreenInstructionsClicked = { }
         )
     }

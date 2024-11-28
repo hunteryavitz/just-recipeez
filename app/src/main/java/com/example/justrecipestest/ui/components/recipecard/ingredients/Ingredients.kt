@@ -22,6 +22,7 @@ fun Ingredients(
     onCheckedChange: (Int, Boolean) -> Unit,
     isExpanded: Boolean,
     onCollapseIngredientsList: () -> Unit,
+    isFullScreen: Boolean,
     onFullScreenIngredientsClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -34,6 +35,7 @@ fun Ingredients(
         IngredientsHeader(
             isExpanded = isExpanded,
             onCollapseIngredientsListClicked = { onCollapseIngredientsList() },
+            isFullScreen = isFullScreen,
             onFullScreenIngredientsClicked = onFullScreenIngredientsClicked
         )
         AnimatedVisibility(
@@ -63,6 +65,7 @@ private fun IngredientsPreview() {
             onCheckedChange = { _, _ -> },
             isExpanded = true,
             onCollapseIngredientsList = { },
+            isFullScreen = false,
             onFullScreenIngredientsClicked = { }
         )
     }

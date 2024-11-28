@@ -86,6 +86,7 @@ fun RecipeCardLandscape(
                         onCheckedChange = onIngredientsCheckedChange,
                         isExpanded = true,
                         onCollapseIngredientsList = { },
+                        isFullScreen = false,
                         onFullScreenIngredientsClicked = { },
                         modifier = Modifier)
                 }
@@ -104,6 +105,7 @@ fun RecipeCardLandscape(
                         onCheckedChange = onInstructionsCheckedChange,
                         isExpanded = true,
                         onCollapseInstructionsList = { },
+                        isFullScreen = false,
                         onFullScreenInstructionsClicked = { },
                         modifier = Modifier
                     )

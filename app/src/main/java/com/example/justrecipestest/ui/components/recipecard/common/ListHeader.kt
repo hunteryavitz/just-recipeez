@@ -1,6 +1,5 @@
 package com.example.justrecipestest.ui.components.recipecard.common
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -34,6 +35,7 @@ fun ListHeader(
     title: String,
     isExpanded: Boolean,
     onCollapseListClicked: () -> Unit,
+    isFullScreen: Boolean,
     onFullScreenListClicked: () -> Unit
 ) {
     Row(
@@ -42,16 +44,18 @@ fun ListHeader(
         modifier = Modifier.fillMaxWidth()
     ) {
         Column {
-            IconButton(
-                onClick = { onCollapseListClicked() }
-            ) {
-                Icon(
-                    imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                    contentDescription = "Expand Card",
-                    tint = Color.Black,
-                    modifier = Modifier
-                        .size(32.dp)
-                )
+            if (!isFullScreen) {
+                IconButton(
+                    onClick = { onCollapseListClicked() }
+                ) {
+                    Icon(
+                        imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                        contentDescription = "Expand Card",
+                        tint = Color.Black,
+                        modifier = Modifier
+                            .size(32.dp)
+                    )
+                }
             }
         }
         Column {
@@ -63,16 +67,18 @@ fun ListHeader(
             )
         }
         Column {
-            IconButton(
-                onClick = { onFullScreenListClicked() }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.KeyboardArrowDown,
-                    contentDescription = "Expand Card",
-                    tint = Color.Black,
-                    modifier = Modifier
-                        .size(32.dp)
-                )
+            if (isExpanded) {
+                IconButton(
+                    onClick = { onFullScreenListClicked() }
+                ) {
+                    Icon(
+                        imageVector = if (isFullScreen) ImageVector.vectorResource(R.drawable.fullscreen_exit_01) else ImageVector.vectorResource(R.drawable.fullscreen_01),
+                        contentDescription = "Expand Card",
+                        tint = Color.Black,
+                        modifier = Modifier
+                            .size(32.dp)
+                    )
+                }
             }
         }
     }
@@ -81,12 +87,13 @@ fun ListHeader(
 @Preview
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
 @Composable
-public fun ListHeaderPreview() {
+fun ListHeaderPreview() {
     JustRecipesTestTheme {
         ListHeader(
             title = "List Header",
             isExpanded = false,
             onCollapseListClicked = { },
+            isFullScreen = false,
             onFullScreenListClicked = { }
         )
     }
