@@ -1,5 +1,9 @@
-package com.example.justrecipestest
+package com.example.justrecipestest.ui.components.recipecard.ingredients
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,13 +13,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.justrecipestest.data.model.Ingredient
 import com.example.justrecipestest.ui.theme.JustRecipesTestTheme
 
 @Composable
 fun Ingredients(
     ingredients: List<Ingredient>,
     onCheckedChange: (Int, Boolean) -> Unit,
-    onCollapseIngredientsListClicked: () -> Unit,
+    isExpanded: Boolean,
+    onCollapseIngredientsList: () -> Unit,
+    isFullScreen: Boolean,
     onFullScreenIngredientsClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -26,13 +33,21 @@ fun Ingredients(
             .border(3.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
     ) {
         IngredientsHeader(
-            onCollapseIngredientsListClicked = { onCollapseIngredientsListClicked() },
+            isExpanded = isExpanded,
+            onCollapseIngredientsListClicked = { onCollapseIngredientsList() },
+            isFullScreen = isFullScreen,
             onFullScreenIngredientsClicked = onFullScreenIngredientsClicked
         )
-        IngredientListStateless(
-            ingredients = ingredients,
-            onCheckedChange = onCheckedChange
-        )
+        AnimatedVisibility(
+            visible = isExpanded,
+            enter = expandVertically(animationSpec = spring()),
+            exit = shrinkVertically(animationSpec = spring())
+        ) {
+            IngredientListStateless(
+                ingredients = ingredients,
+                onCheckedChange = onCheckedChange
+            )
+        }
     }
 }
 
@@ -46,11 +61,11 @@ private fun IngredientsPreview() {
                 Ingredient("1 cup Flour", false),
                 Ingredient("1 cup Sugar", false),
                 Ingredient("1 cup Butter", false),
-                Ingredient("1 cup Milk", false),
-                Ingredient("1 cup Chocolate", false)
             ),
             onCheckedChange = { _, _ -> },
-            onCollapseIngredientsListClicked = { },
+            isExpanded = true,
+            onCollapseIngredientsList = { },
+            isFullScreen = false,
             onFullScreenIngredientsClicked = { }
         )
     }
