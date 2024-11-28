@@ -22,7 +22,7 @@ fun InstructionsHeader(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .padding(12.dp)
+            .padding(8.dp)
             .fillMaxWidth()
     ) {
         ListHeader(

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -50,36 +49,27 @@ fun RecipeCardLandscape(
                 .matchParentSize()
                 .background(Color.White.copy(alpha = 0.7f))
         )
+        Row {
+            Header(
+                header = header,
+                setIsFavorite = {},
+                isFavorite = false,
+                modifier = Modifier
+            )
+        }
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 24.dp, start = 24.dp)
+                .padding(top = 54.dp)
         ) {
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .weight(.5f)
-            ) {
-                Row(
-                    modifier = Modifier
-                        .padding(4.dp)
-                ) {
-                    Header(
-                        header = header,
-                        setIsFavorite = {},
-                        isFavorite = false,
-                        modifier = Modifier
-                    )
-                }
-            }
-            Column(
-                modifier = Modifier
-                    .weight(1f)
+                    .weight(0.5f)
             ) {
                 Row(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(12.dp)
+//                        .padding(12.dp)
                 ) {
                     Ingredients(
                         ingredients,
@@ -93,12 +83,12 @@ fun RecipeCardLandscape(
             }
             Column(
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(0.5f)
             ) {
                 Row(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(12.dp)
+//                        .padding(12.dp)
                 ) {
                     Instructions(
                         instructions,
@@ -115,48 +105,48 @@ fun RecipeCardLandscape(
     }
 }
 
-@Preview
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Preview("Light Theme", widthDp = 800, heightDp = 400)
+@Preview("Dark Theme", widthDp = 800, heightDp = 400, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun RecipeCardLandscapePreview() {
     JustRecipesTestTheme {
         RecipeCardLandscape(
             recipe = Recipe(
-                title = "Recipe Title",
+                title = "Roasted Meat and Vegetables",
                 servings = 4,
                 prepTime = 30,
-                description = "Recipe Description",
+                description = "A delicious and healthy meal that is easy to make.",
                 isFavorite = false,
                 ingredients = listOf(
-                    Ingredient("Ingredient 1", false),
-                    Ingredient("Ingredient 2", false),
-                    Ingredient("Ingredient 3", false),
-                    Ingredient("Ingredient 4", false),
-                    Ingredient("Ingredient 5", false)
+                    Ingredient("Beef", false),
+                    Ingredient("Potatoes", false),
+                    Ingredient("Carrots", false),
+                    Ingredient("Onions", false),
+                    Ingredient("Garlic", false)
                 ),
                 instructions = listOf(
-                    Instruction("Instruction 1", false),
-                    Instruction("Instruction 2", false),
-                    Instruction("Instruction 3", false),
-                    Instruction("Instruction 4", false),
-                    Instruction("Instruction 5", false)
+                    Instruction("Preheat oven to 400°F", false),
+                    Instruction("Chop vegetables", false),
+                    Instruction("Season meat and vegetables", false),
+                    Instruction("Roast for 30 minutes", false),
+                    Instruction("Enjoy!", false)
                 ),
-                image = R.drawable.header_02
+                image = R.drawable.header_03
             ),
             ingredients = listOf(
-                Ingredient("Ingredient 1", false),
-                Ingredient("Ingredient 2", false),
-                Ingredient("Ingredient 3", false),
-                Ingredient("Ingredient 4", false),
-                Ingredient("Ingredient 5", false)
+                Ingredient("Beef", false),
+                Ingredient("Potatoes", false),
+                Ingredient("Carrots", false),
+                Ingredient("Onions", false),
+                Ingredient("Garlic", false)
             ),
             onIngredientsCheckedChange = { _, _ -> },
             instructions = listOf(
-                Instruction("Instruction 1", false),
-                Instruction("Instruction 2", false),
-                Instruction("Instruction 3", false),
-                Instruction("Instruction 4", false),
-                Instruction("Instruction 5", false)
+                Instruction("Preheat oven to 400°F", false),
+                Instruction("Chop vegetables", false),
+                Instruction("Season meat and vegetables", false),
+                Instruction("Roast for 30 minutes", false),
+                Instruction("Enjoy!", false)
             ),
             onInstructionsCheckedChange = { _, _ -> }
         )
