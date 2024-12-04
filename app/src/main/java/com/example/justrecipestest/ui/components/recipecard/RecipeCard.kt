@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalConfiguration
@@ -46,7 +45,7 @@ val recipe = Recipe(
 @Composable
 fun RecipeCard(modifier: PaddingValues, recipe: Recipe) {
     val configuration = LocalConfiguration.current
-    val (isFavorite, setIsFavorite) = remember { mutableStateOf(recipe.isFavorite) }
+    val (isFavorite, setIsFavorite) = rememberSaveable { mutableStateOf(recipe.isFavorite) }
 
     val ingredientStates = rememberSaveable(
         saver = listSaver(
@@ -70,9 +69,9 @@ fun RecipeCard(modifier: PaddingValues, recipe: Recipe) {
         Configuration.ORIENTATION_PORTRAIT ->
             RecipeCardPortrait(
                 recipe = recipe,
-                ingredients = ingredientStates,
                 setIsFavorite = { setIsFavorite(!isFavorite) },
                 isFavorite = isFavorite,
+                ingredients = ingredientStates,
                 onIngredientsCheckedChange = { index, checked ->
                     ingredientStates[index] = ingredientStates[index].copy(isChecked = checked)
                 },
@@ -83,7 +82,9 @@ fun RecipeCard(modifier: PaddingValues, recipe: Recipe) {
             )
         Configuration.ORIENTATION_LANDSCAPE ->
             RecipeCardLandscape(
-                recipe,
+                recipe = recipe,
+                setIsFavorite = { setIsFavorite(!isFavorite) },
+                isFavorite = isFavorite,
                 ingredients = ingredientStates,
                 onIngredientsCheckedChange = { index, checked ->
                     ingredientStates[index] = ingredientStates[index].copy(isChecked = checked)
@@ -94,7 +95,7 @@ fun RecipeCard(modifier: PaddingValues, recipe: Recipe) {
                 }
             )
         else -> RecipeCardPortrait(
-            recipe,
+            recipe = recipe,
             ingredients = ingredientStates,
             setIsFavorite = { setIsFavorite(!isFavorite) },
             isFavorite = isFavorite,

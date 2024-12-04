@@ -1,13 +1,18 @@
 package com.example.justrecipestest.ui.components.recipecard
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -26,13 +31,33 @@ import com.example.justrecipestest.ui.theme.JustRecipesTestTheme
 @Composable
 fun RecipeCardLandscape(
     recipe: Recipe,
+    setIsFavorite: (Boolean) -> Unit,
+    isFavorite: Boolean,
     ingredients: List<Ingredient>,
     onIngredientsCheckedChange: (Int, Boolean) -> Unit,
     instructions: List<Instruction>,
     onInstructionsCheckedChange: (Int, Boolean) -> Unit,
 ) {
-    val header =
-        Header(recipe.image, recipe.title, recipe.servings, recipe.prepTime, recipe.description)
+    val header = Header(
+        recipe.image,
+        recipe.title,
+        recipe.servings,
+        recipe.prepTime,
+        recipe.description
+    )
+
+    val (isCollapsedIngredientsList, setIsCollapsedIngredientsList) = remember { mutableStateOf(false) }
+    val ingredientsListWeight by animateFloatAsState(
+        targetValue = if (isCollapsedIngredientsList) 0.1f else 0.5f,
+        label = ""
+    )
+    val (isFullScreenIngredients, setIsFullScreenIngredients) = remember { mutableStateOf(false) }
+    val (isCollapsedInstructionsList, setIsCollapsedInstructionsList) = remember { mutableStateOf(false) }
+    val instructionsListWeight by animateFloatAsState(
+        targetValue = if (isCollapsedInstructionsList) 0.1f else 0.5f,
+        label = ""
+    )
+    val (isFullScreenInstructions, setIsFullScreenInstructions) = remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -52,9 +77,10 @@ fun RecipeCardLandscape(
         Row {
             Header(
                 header = header,
-                setIsFavorite = {},
-                isFavorite = false,
+                setIsFavorite = setIsFavorite,
+                isFavorite = isFavorite,
                 modifier = Modifier
+                    .fillMaxWidth()
             )
         }
         Row(
@@ -69,15 +95,15 @@ fun RecipeCardLandscape(
                 Row(
                     modifier = Modifier
                         .weight(1f)
-//                        .padding(12.dp)
+                        .padding(12.dp)
                 ) {
                     Ingredients(
                         ingredients,
                         onCheckedChange = onIngredientsCheckedChange,
-                        isExpanded = true,
-                        onCollapseIngredientsList = { },
+                        isExpanded = !isCollapsedIngredientsList,
+                        onCollapseIngredientsList = { setIsCollapsedIngredientsList(!isCollapsedIngredientsList) },
                         isFullScreen = false,
-                        onFullScreenIngredientsClicked = { },
+                        onFullScreenIngredientsClicked = { setIsFullScreenIngredients(true) },
                         modifier = Modifier)
                 }
             }
@@ -88,15 +114,15 @@ fun RecipeCardLandscape(
                 Row(
                     modifier = Modifier
                         .weight(1f)
-//                        .padding(12.dp)
+                        .padding(12.dp)
                 ) {
                     Instructions(
-                        instructions,
+                        instructions = instructions,
                         onCheckedChange = onInstructionsCheckedChange,
-                        isExpanded = true,
-                        onCollapseInstructionsList = { },
+                        isExpanded = !isCollapsedInstructionsList,
+                        onCollapseInstructionsList = { setIsCollapsedInstructionsList(!isCollapsedInstructionsList) },
                         isFullScreen = false,
-                        onFullScreenInstructionsClicked = { },
+                        onFullScreenInstructionsClicked = { setIsFullScreenInstructions(true) },
                         modifier = Modifier
                     )
                 }
@@ -133,6 +159,8 @@ private fun RecipeCardLandscapePreview() {
                 ),
                 image = R.drawable.header_03
             ),
+            setIsFavorite = { },
+            isFavorite = false,
             ingredients = listOf(
                 Ingredient("Beef", false),
                 Ingredient("Potatoes", false),

@@ -1,5 +1,6 @@
 package com.example.justrecipestest.ui.components.recipecard.header
 
+import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandVertically
@@ -11,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.justrecipestest.R
 
@@ -29,7 +31,8 @@ fun Header(
     isFavorite: Boolean,
     modifier: Modifier
 ) {
-    val (isExpanded, setIsExpanded) = remember { mutableStateOf(true) }
+    val configuration = LocalConfiguration.current
+    val (isExpanded, setIsExpanded) = remember { mutableStateOf(configuration.orientation == Configuration.ORIENTATION_PORTRAIT) }
 
     HeaderTitleBar(
         header = header,
