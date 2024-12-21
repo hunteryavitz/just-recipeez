@@ -83,8 +83,10 @@ fun RecipeCardPortrait(
             if (!isFullScreenIngredients && !isFullScreenInstructions) {
                 Header(
                     header = header,
-                    setIsFavorite = setIsFavorite,
+                    isExpanded = !isCollapsedIngredientsList,
+                    setIsExpanded = { setIsCollapsedIngredientsList(!isCollapsedIngredientsList) },
                     isFavorite = isFavorite,
+                    setIsFavorite = setIsFavorite,
                     modifier = Modifier
                         .fillMaxWidth()
                 )

@@ -14,16 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.justrecipestest.R
 
-data class Header(
-    val image: Int,
-    val title: String,
-    val servings: Int,
-    val prepTime: Int,
-    val description: String
-)
-
 @Composable
-fun Header(
+fun HeaderLandscape(
     header: Header,
     isExpanded: Boolean,
     setIsExpanded: (Boolean) -> Unit,
@@ -58,16 +50,23 @@ fun Header(
             exit = shrinkVertically(animationSpec = spring())
         ) {
             Row {
-                HeaderImage(header.image)
+                Column {
+                    HeaderImage(header.image)
+                }
+                Column {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceAround,
+                        modifier = modifier
+                            .fillMaxWidth()
+                    ) {
+                        HeaderDescription(header.description)
+                    }
+                    Row {
+                        HeaderSubtitle(header.servings, header.prepTime)
+                    }
+                }
             }
-            Row {
-                HeaderSubtitle(header.servings, header.prepTime)
-            }
-            Row {
-                HeaderDescription(header.description)
-            }
-
-    }
+        }
 //        Column(
 //            modifier = modifier
 //                .fillMaxWidth(),
@@ -80,11 +79,11 @@ fun Header(
     }
 }
 
-@Preview
+@Preview(widthDp = 800, heightDp = 400)
 @Preview("Dark Theme", uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun PreviewHeader() {
-    Header(
+fun PreviewHeaderLandscape() {
+    HeaderLandscape(
         header = Header(
             image = R.drawable.header_02,
             title = "Chocolate Cake",

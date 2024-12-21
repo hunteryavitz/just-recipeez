@@ -1,5 +1,6 @@
 package com.example.justrecipestest.ui.components.recipecard
 
+import android.content.res.Configuration
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,6 +26,7 @@ import com.example.justrecipestest.data.model.Ingredient
 import com.example.justrecipestest.data.model.Instruction
 import com.example.justrecipestest.data.model.Recipe
 import com.example.justrecipestest.ui.components.recipecard.header.Header
+import com.example.justrecipestest.ui.components.recipecard.header.HeaderLandscape
 import com.example.justrecipestest.ui.components.recipecard.ingredients.Ingredients
 import com.example.justrecipestest.ui.components.recipecard.instructions.Instructions
 import com.example.justrecipestest.ui.theme.JustRecipesTestTheme
@@ -45,7 +48,11 @@ fun RecipeCardLandscape(
         recipe.prepTime,
         recipe.description
     )
+    val configuration = LocalConfiguration.current
+//    val (isHeaderExpanded, setIsHeaderExpanded) = remember { mutableStateOf(configuration.orientation == Configuration.ORIENTATION_PORTRAIT) }
+    val (isHeaderExpanded, setIsHeaderExpanded) = remember { mutableStateOf(true) }
 
+//    val (isHeaderExpanded, setIsHeaderExpanded) = remember { mutableStateOf(false) }
     val (isCollapsedIngredientsList, setIsCollapsedIngredientsList) = remember { mutableStateOf(false) }
     val ingredientsListWeight by animateFloatAsState(
         targetValue = if (isCollapsedIngredientsList) 0.1f else 0.5f,
@@ -74,57 +81,74 @@ fun RecipeCardLandscape(
                 .matchParentSize()
                 .background(Color.White.copy(alpha = 0.7f))
         )
-        Row {
-            Header(
-                header = header,
-                setIsFavorite = setIsFavorite,
-                isFavorite = isFavorite,
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
-        }
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 54.dp)
-        ) {
-            Column(
-                modifier = Modifier
-                    .weight(0.5f)
-            ) {
-                Row(
+        if (isHeaderExpanded) {
+            Row {
+                HeaderLandscape(
+                    header = header,
+                    isExpanded = true,
+                    setIsExpanded = { setIsHeaderExpanded(false) },
+                    isFavorite = isFavorite,
+                    setIsFavorite = setIsFavorite,
                     modifier = Modifier
-                        .weight(1f)
-                        .padding(12.dp)
-                ) {
-                    Ingredients(
-                        ingredients,
-                        onCheckedChange = onIngredientsCheckedChange,
-                        isExpanded = !isCollapsedIngredientsList,
-                        onCollapseIngredientsList = { setIsCollapsedIngredientsList(!isCollapsedIngredientsList) },
-                        isFullScreen = false,
-                        onFullScreenIngredientsClicked = { setIsFullScreenIngredients(true) },
-                        modifier = Modifier)
-                }
+//                        .fillMaxWidth()
+//                        .fillMaxSize()
+                )
             }
-            Column(
-                modifier = Modifier
-                    .weight(0.5f)
-            ) {
-                Row(
+        } else {
+            Row {
+                HeaderLandscape(
+                    header = header,
+                    isExpanded = false,
+                    setIsExpanded = { setIsHeaderExpanded(true) },
+                    isFavorite = isFavorite,
+                    setIsFavorite = setIsFavorite,
                     modifier = Modifier
-                        .weight(1f)
-                        .padding(12.dp)
+                        .fillMaxWidth()
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 54.dp)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .weight(0.5f)
                 ) {
-                    Instructions(
-                        instructions = instructions,
-                        onCheckedChange = onInstructionsCheckedChange,
-                        isExpanded = !isCollapsedInstructionsList,
-                        onCollapseInstructionsList = { setIsCollapsedInstructionsList(!isCollapsedInstructionsList) },
-                        isFullScreen = false,
-                        onFullScreenInstructionsClicked = { setIsFullScreenInstructions(true) },
+                    Row(
                         modifier = Modifier
-                    )
+                            .weight(1f)
+                            .padding(12.dp)
+                    ) {
+                        Ingredients(
+                            ingredients,
+                            onCheckedChange = onIngredientsCheckedChange,
+                            isExpanded = !isCollapsedIngredientsList,
+                            onCollapseIngredientsList = { setIsCollapsedIngredientsList(!isCollapsedIngredientsList) },
+                            isFullScreen = false,
+                            onFullScreenIngredientsClicked = { setIsFullScreenIngredients(true) },
+                            modifier = Modifier)
+                    }
+                }
+                Column(
+                    modifier = Modifier
+                        .weight(0.5f)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(12.dp)
+                    ) {
+                        Instructions(
+                            instructions = instructions,
+                            onCheckedChange = onInstructionsCheckedChange,
+                            isExpanded = !isCollapsedInstructionsList,
+                            onCollapseInstructionsList = { setIsCollapsedInstructionsList(!isCollapsedInstructionsList) },
+                            isFullScreen = false,
+                            onFullScreenInstructionsClicked = { setIsFullScreenInstructions(true) },
+                            modifier = Modifier
+                        )
+                    }
                 }
             }
         }
