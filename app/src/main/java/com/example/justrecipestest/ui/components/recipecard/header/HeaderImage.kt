@@ -1,6 +1,7 @@
 package com.example.justrecipestest.ui.components.recipecard.header
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -15,7 +16,10 @@ import androidx.compose.ui.unit.dp
 import com.example.justrecipestest.R
 
 @Composable
-fun HeaderImage(image: Int) {
+fun HeaderImage(
+    image: Int,
+    isLandscape: Boolean = false
+) {
     Row(modifier = Modifier
         .padding(8.dp)) {
         Image(
@@ -23,7 +27,7 @@ fun HeaderImage(image: Int) {
             contentDescription = "Header",
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .size(96.dp)
+                .size(if (isLandscape) 256.dp else 128.dp)
                 .clip(RoundedCornerShape(14.dp))
         )
     }

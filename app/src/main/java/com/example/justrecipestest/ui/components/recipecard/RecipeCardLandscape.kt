@@ -50,7 +50,7 @@ fun RecipeCardLandscape(
     )
     val configuration = LocalConfiguration.current
 //    val (isHeaderExpanded, setIsHeaderExpanded) = remember { mutableStateOf(configuration.orientation == Configuration.ORIENTATION_PORTRAIT) }
-    val (isHeaderExpanded, setIsHeaderExpanded) = remember { mutableStateOf(true) }
+    val (isHeaderExpanded, setIsHeaderExpanded) = remember { mutableStateOf(false) }
 
 //    val (isHeaderExpanded, setIsHeaderExpanded) = remember { mutableStateOf(false) }
     val (isCollapsedIngredientsList, setIsCollapsedIngredientsList) = remember { mutableStateOf(false) }
@@ -89,6 +89,7 @@ fun RecipeCardLandscape(
                     setIsExpanded = { setIsHeaderExpanded(false) },
                     isFavorite = isFavorite,
                     setIsFavorite = setIsFavorite,
+                    isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE,
                     modifier = Modifier
 //                        .fillMaxWidth()
 //                        .fillMaxSize()
@@ -102,6 +103,7 @@ fun RecipeCardLandscape(
                     setIsExpanded = { setIsHeaderExpanded(true) },
                     isFavorite = isFavorite,
                     setIsFavorite = setIsFavorite,
+                    isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE,
                     modifier = Modifier
                         .fillMaxWidth()
                 )

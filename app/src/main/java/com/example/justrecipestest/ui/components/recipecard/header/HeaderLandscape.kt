@@ -4,9 +4,11 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,6 +23,7 @@ fun HeaderLandscape(
     setIsExpanded: (Boolean) -> Unit,
     isFavorite: Boolean,
     setIsFavorite: (Boolean) -> Unit,
+    isLandscape: Boolean = false,
     modifier: Modifier
 ) {
 
@@ -31,7 +34,8 @@ fun HeaderLandscape(
     ) {
         Row(
             modifier = modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .background(color = androidx.compose.ui.graphics.Color.Gray),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -49,20 +53,33 @@ fun HeaderLandscape(
             enter = expandVertically(animationSpec = spring()),
             exit = shrinkVertically(animationSpec = spring())
         ) {
-            Row {
-                Column {
-                    HeaderImage(header.image)
+            Row(modifier = modifier
+                .fillMaxSize()
+                .weight(1f)
+                .background(color = androidx.compose.ui.graphics.Color.LightGray),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+                Column(
+                    modifier = modifier
+                        .weight(0.5f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    HeaderImage(header.image, isLandscape)
                 }
-                Column {
+                Column(
+                    modifier = modifier
+                        .weight(0.5f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Row(
                         horizontalArrangement = Arrangement.SpaceAround,
                         modifier = modifier
-                            .fillMaxWidth()
                     ) {
-                        HeaderDescription(header.description)
+                        HeaderDescription(header.description, isLandscape)
                     }
                     Row {
-                        HeaderSubtitle(header.servings, header.prepTime)
+                        HeaderSubtitle(header.servings, header.prepTime, isLandscape)
                     }
                 }
             }
@@ -89,7 +106,7 @@ fun PreviewHeaderLandscape() {
             title = "Chocolate Cake",
             servings = 4,
             prepTime = 30,
-            description = "This is a delicious chocolate cake recipe that is perfect for any occasion."
+            description = "A delicious chocolate cake for all occasions."
         ),
         isExpanded = true,
         setIsExpanded = {},

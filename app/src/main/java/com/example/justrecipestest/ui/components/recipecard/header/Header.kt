@@ -57,16 +57,29 @@ fun Header(
             enter = expandVertically(animationSpec = spring()),
             exit = shrinkVertically(animationSpec = spring())
         ) {
-            Row {
-                HeaderImage(header.image)
+            Column {
+                Row(
+                    modifier = modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    HeaderImage(header.image)
+                }
+                Row(
+                    modifier = modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    HeaderDescription(header.description)
+                }
+                Row(
+                    modifier = modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    HeaderSubtitle(header.servings, header.prepTime)
+                }
             }
-            Row {
-                HeaderSubtitle(header.servings, header.prepTime)
-            }
-            Row {
-                HeaderDescription(header.description)
-            }
-
     }
 //        Column(
 //            modifier = modifier
