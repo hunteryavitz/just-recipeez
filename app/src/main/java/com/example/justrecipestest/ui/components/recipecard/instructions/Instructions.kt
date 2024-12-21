@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.justrecipestest.data.model.Instruction
@@ -30,7 +31,7 @@ fun Instructions(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .border(3.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
+            .border(1.dp, Color.Black.copy(0.5f), RoundedCornerShape(8.dp))
     ) {
         InstructionsHeader(
             isExpanded = isExpanded,
@@ -52,7 +53,7 @@ fun Instructions(
 }
 
 @Preview
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Preview("Dark Theme", uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun InstructionsPreview() {
     JustRecipesTestTheme {

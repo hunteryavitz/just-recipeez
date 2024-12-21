@@ -22,7 +22,10 @@ val fontFamilyDancingScript = FontFamily(
 )
 
 @Composable
-fun HeaderDescription(description: String) {
+fun HeaderDescription(
+    description: String,
+    isLandscape: Boolean = false
+    ) {
     Row(
         modifier = Modifier
             .padding(8.dp),
@@ -33,7 +36,7 @@ fun HeaderDescription(description: String) {
             text = description,
             color = Color.Black,
             textAlign = TextAlign.Center,
-            fontSize = 16.sp,
+            fontSize = if (isLandscape) 32.sp else 24.sp,
             fontFamily = fontFamilyDancingScript
         )
     }

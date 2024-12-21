@@ -79,7 +79,7 @@ fun IngredientStateless(
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
-                .weight(2f)
+                .weight(4f)
                 .padding(8.dp)
         ) {
             Text(

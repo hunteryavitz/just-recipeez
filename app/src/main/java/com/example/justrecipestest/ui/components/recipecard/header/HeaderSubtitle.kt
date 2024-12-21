@@ -13,7 +13,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun HeaderSubtitle(servings: Int, prepTime: Int) {
+fun HeaderSubtitle(
+    servings: Int, prepTime: Int,
+    isLandscape: Boolean = false
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -23,20 +26,20 @@ fun HeaderSubtitle(servings: Int, prepTime: Int) {
             .weight(1f),
             horizontalAlignment = Alignment.End
         ) {
-            SubtitleServingsInfo(servings)
+            SubtitleServingsInfo(servings, isLandscape)
         }
         Column(modifier = Modifier) {
             Text(
                 text = " | ",
                 color = Color.Black,
-                fontSize = 24.sp
+                fontSize = if (isLandscape) 48.sp else 32.sp
             )
         }
         Column(modifier = Modifier
             .weight(1f),
             horizontalAlignment = Alignment.Start
         ) {
-            SubtitleCookTimeInfo(prepTime)
+            SubtitleCookTimeInfo(prepTime, isLandscape)
         }
     }
 }

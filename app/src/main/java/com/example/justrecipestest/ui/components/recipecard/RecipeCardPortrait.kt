@@ -49,18 +49,21 @@ fun RecipeCardPortrait(
         recipe.description
     )
 
+    val (isCollapsedHeader, setIsCollapsedHeader) = remember { mutableStateOf(false) }
+
+    val (isFullScreenIngredients, setIsFullScreenIngredients) = remember { mutableStateOf(false) }
     val (isCollapsedIngredientsList, setIsCollapsedIngredientsList) = remember { mutableStateOf(false) }
     val ingredientsListWeight by animateFloatAsState(
         targetValue = if (isCollapsedIngredientsList) 0.1f else 0.5f,
         label = ""
     )
-    val (isFullScreenIngredients, setIsFullScreenIngredients) = remember { mutableStateOf(false) }
+
+    val (isFullScreenInstructions, setIsFullScreenInstructions) = remember { mutableStateOf(false) }
     val (isCollapsedInstructionsList, setIsCollapsedInstructionsList) = remember { mutableStateOf(false) }
     val instructionsListWeight by animateFloatAsState(
         targetValue = if (isCollapsedInstructionsList) 0.1f else 0.5f,
         label = ""
     )
-    val (isFullScreenInstructions, setIsFullScreenInstructions) = remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -83,8 +86,10 @@ fun RecipeCardPortrait(
             if (!isFullScreenIngredients && !isFullScreenInstructions) {
                 Header(
                     header = header,
-                    setIsFavorite = setIsFavorite,
+                    isExpanded = !isCollapsedHeader,
+                    setIsExpanded = { setIsCollapsedHeader(!isCollapsedHeader) },
                     isFavorite = isFavorite,
+                    setIsFavorite = setIsFavorite,
                     modifier = Modifier
                         .fillMaxWidth()
                 )

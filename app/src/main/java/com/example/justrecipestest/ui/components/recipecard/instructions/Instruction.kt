@@ -55,6 +55,7 @@ fun InstructionStateless(
 
     Row(
         horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
     ) {
