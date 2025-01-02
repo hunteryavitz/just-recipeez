@@ -16,7 +16,7 @@ import com.example.justrecipestest.data.model.Instruction
 import com.example.justrecipestest.data.model.Recipe
 
 val recipe = Recipe(
-    image = R.drawable.header_02,
+    image = R.drawable.chocolate_cake,
     title = "Chocolate Cake",
     servings = 8,
     prepTime = 60,

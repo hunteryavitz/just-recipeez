@@ -7,38 +7,16 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import com.example.justrecipestest.data.model.Ingredient
-import com.example.justrecipestest.data.model.Instruction
 import com.example.justrecipestest.data.model.Recipe
+import com.example.justrecipestest.data.model.RecipeStub
 import com.example.justrecipestest.ui.components.recipecard.RecipeCard
 import com.example.justrecipestest.ui.theme.JustRecipesTestTheme
+import kotlinx.serialization.json.Json
+import java.io.File
 
-val recipe = Recipe(
-    image = R.drawable.header_02,
-    title = "Chocolate Cake",
-    servings = 8,
-    prepTime = 60,
-    description = "A delicious chocolate cake for all occasions",
-    isFavorite = false,
-    ingredients = listOf(
-        Ingredient("Flour", false),
-        Ingredient("Sugar", false),
-        Ingredient("Cocoa Powder", false),
-        Ingredient("Baking Powder", false),
-        Ingredient("Baking Soda", false),
-        Ingredient("Salt", false),
-        Ingredient("Eggs", false),
-        Ingredient("Milk", false)
-    ),
-    instructions = listOf(
-        Instruction("Preheat oven to 350°F (180°C). Grease and flour two 9-inch round baking pans.", false),
-        Instruction("Stir together sugar, flour, cocoa, baking powder, baking soda, and salt in large bowl.", false),
-        Instruction("Add eggs, milk, oil, and vanilla; beat on medium speed of mixer 2 minutes.", false),
-        Instruction("Stir in boiling water (batter will be thin). Pour batter into prepared pans.", false),
-        Instruction("Bake 30 to 35 minutes or until wooden pick inserted in center comes out clean.", false),
-        Instruction("Cool 10 minutes; remove from pans to wire racks. Cool completely.", false)
-    )
-)
+val recipeJson = File("java/com/example/justrecipestest/data/chocolate-cake.json")
+val recipeContent = recipeJson.readText()
+val mainRecipe: Recipe = Json.decodeFromString<RecipeStub>(recipeContent).toRecipe()
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +38,7 @@ class MainActivity : ComponentActivity() {
 //                    }
                 ) { innerPadding ->
 //                    Main(innerPadding, names)
-                    RecipeCard(innerPadding, recipe)
+                    RecipeCard(innerPadding, mainRecipe)
                 }
             }
         }

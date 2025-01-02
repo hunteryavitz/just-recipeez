@@ -1,7 +1,6 @@
 package com.example.justrecipestest.ui.components.recipecard.header
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -37,5 +36,5 @@ fun HeaderImage(
 @Preview("Dark Theme", uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun PreviewImageHeader() {
-    HeaderImage(image = R.drawable.header_02)
+    HeaderImage(image = R.drawable.chocolate_cake)
 }

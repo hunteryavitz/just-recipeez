@@ -1,0 +1,48 @@
+{
+  "image": "https://www.thespruceeats.com/five-minute-chocolate-cake-3053369",
+  "title": "Chocolate Cake",
+  "servings": "12",
+  "prep_time": "15 minutes",
+  "description": "A delicious chocolate cake for all occasions",
+  "ingredients": [
+    "1 3/4 cups all-purpose flour",
+    "2 cups sugar",
+    "3/4 cup unsweetened cocoa powder",
+    "2 teaspoons baking soda",
+    "1 teaspoon baking powder",
+    "1 teaspoon salt",
+    "2 eggs",
+    "1 cup strong brewed coffee",
+    "1 cup buttermilk",
+    "1/2 cup vegetable oil",
+    "1 tablespoon vanilla extract"
+  ],
+  "instructions": [
+    "Preheat oven to 350°F",
+    "Mix dry ingredients",
+    "Add wet ingredients",
+    "Mix until smooth",
+    "Pour into greased pan",
+    "Bake for 30-35 minutes"
+  ],
+  "categories": [
+    "Dessert",
+    "Cake"
+  ],
+  "tags": [
+    "Chocolate",
+    "Cake",
+    "Dessert"
+  ],
+  "nutritional_info": {
+    "calories": "350",
+    "fat": "12g",
+    "saturated_fat": "2g",
+    "cholesterol": "30mg",
+    "sodium": "300mg",
+    "carbohydrates": "55g",
+    "fiber": "3g",
+    "sugar": "35g",
+    "protein": "5g"
+  }
+}
