@@ -165,7 +165,7 @@ fun RecipeCardPortrait(
 fun PreviewRecipeCardPortrait() {
     RecipeCardPortrait(
         recipe = Recipe(
-            image = R.drawable.header_02,
+            image = R.drawable.chocolate_cake,
             title = "Chocolate Cake",
             servings = 4,
             prepTime = 30,
